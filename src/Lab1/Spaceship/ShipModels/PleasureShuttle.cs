@@ -6,5 +6,5 @@ namespace Itmo.ObjectOrientedProgramming.Lab1.Spaceship.ShipModels;
 public class PleasureShuttle : Spaceship
 {
     public PleasureShuttle()
-        : base(new ImpulseEngineC(), new Deflector(StrengthClasses.NoClass), new Hull(StrengthClasses.Class1)) { }
+        : base(new ImpulseEngineC(), null, new Hull(StrengthClasses.Class1)) { }
 }

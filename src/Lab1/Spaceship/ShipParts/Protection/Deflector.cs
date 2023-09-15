@@ -15,16 +15,13 @@ public class Deflector : Protection
             case StrengthClasses.Class3:
                 SetStrengthProperties(40, 10, 1);
                 break;
-            case StrengthClasses.NoClass:
-                SetStrengthProperties(0, 0, 0);
-                break;
         }
 
         if (isPhotonDeflectorSet)
         {
-            AntimatterFlareCountReflect = 3;
+            AntimatterFlaresCountReflect = 3;
         }
     }
 
-    public int AntimatterFlareCountReflect { get; }
+    public int AntimatterFlaresCountReflect { get; set; }
 }
