@@ -1,7 +1,7 @@
 using System;
 using Itmo.ObjectOrientedProgramming.Lab1.SpaceshipEntity;
 
-namespace Itmo.ObjectOrientedProgramming.Lab1.Route.EnvironmentEntity;
+namespace Itmo.ObjectOrientedProgramming.Lab1.RouteEntity.EnvironmentEntity;
 
 public abstract class Environment
 {

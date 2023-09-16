@@ -1,11 +1,12 @@
 using System;
+using Itmo.ObjectOrientedProgramming.Lab1.Service.Organizations;
 using Itmo.ObjectOrientedProgramming.Lab1.SpaceshipEntity;
 using Itmo.ObjectOrientedProgramming.Lab1.SpaceshipEntity.ShipParts.Engine;
 using Itmo.ObjectOrientedProgramming.Lab1.SpaceshipEntity.ShipParts.Protection;
 
-namespace Itmo.ObjectOrientedProgramming.Lab1.Route.EnvironmentEntity;
+namespace Itmo.ObjectOrientedProgramming.Lab1.RouteEntity.EnvironmentEntity;
 
-public class NebulaOfSpaceIncreasedDensity : EnvironmentEntity.Environment
+public class NebulaOfSpaceIncreasedDensity : Environment
 {
     private readonly int _antimatterFlaresCount;
 
@@ -57,7 +58,8 @@ public class NebulaOfSpaceIncreasedDensity : EnvironmentEntity.Environment
         int travelTime = (int)Distance / engine.SpeedInLightYearsPerHour;
         int spentFuel = engine.ActivePlasmaConsumptionPerStart
                         + (engine.ActivePlasmaConsumptionPerLightYear * travelTime);
+        int spentMoney = spentFuel * FuelExchange.GravitationalMatterPrice;
 
-        return new RouteReport(RouteResult.Success, travelTime, spentFuel);
+        return new RouteReport(RouteResult.Success, travelTime, spentFuel, spentMoney);
     }
 }

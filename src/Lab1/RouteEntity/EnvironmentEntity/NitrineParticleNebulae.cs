@@ -1,11 +1,12 @@
 using System;
+using Itmo.ObjectOrientedProgramming.Lab1.Service.Organizations;
 using Itmo.ObjectOrientedProgramming.Lab1.SpaceshipEntity;
 using Itmo.ObjectOrientedProgramming.Lab1.SpaceshipEntity.ShipParts.Engine;
 using Itmo.ObjectOrientedProgramming.Lab1.SpaceshipEntity.ShipParts.Protection;
 
-namespace Itmo.ObjectOrientedProgramming.Lab1.Route.EnvironmentEntity;
+namespace Itmo.ObjectOrientedProgramming.Lab1.RouteEntity.EnvironmentEntity;
 
-public class NitrineParticleNebulae : EnvironmentEntity.Environment
+public class NitrineParticleNebulae : Environment
 {
     private readonly int _spaceWhalesCount;
 
@@ -37,11 +38,12 @@ public class NitrineParticleNebulae : EnvironmentEntity.Environment
         int travelTime = (int)Distance / engine.SpeedInLightYearsPerHour;
         int spentFuel = engine.ActivePlasmaConsumptionPerStart
                         + (engine.ActivePlasmaConsumptionPerLightYear * travelTime);
+        int spentMoney = spentFuel * FuelExchange.ActivePlasmaPrice;
 
         // Obstacle checking
         if (spaceship.HasAntiNitrineEmitter)
         {
-            return new RouteReport(RouteResult.Success, travelTime, spentFuel);
+            return new RouteReport(RouteResult.Success, travelTime, spentFuel, spentMoney);
         }
 
         Deflector? deflector = spaceship.Deflector;
@@ -51,6 +53,6 @@ public class NitrineParticleNebulae : EnvironmentEntity.Environment
         }
 
         spaceship.DestroyDeflector();
-        return new RouteReport(RouteResult.Success, travelTime, spentFuel);
+        return new RouteReport(RouteResult.Success, travelTime, spentFuel, spentMoney);
     }
 }
