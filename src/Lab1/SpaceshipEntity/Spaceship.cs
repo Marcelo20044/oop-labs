@@ -1,13 +1,13 @@
-using Itmo.ObjectOrientedProgramming.Lab1.Spaceship.ShipParts.Engine;
-using Itmo.ObjectOrientedProgramming.Lab1.Spaceship.ShipParts.Protection;
+using Itmo.ObjectOrientedProgramming.Lab1.SpaceshipEntity.ShipParts.Engine;
+using Itmo.ObjectOrientedProgramming.Lab1.SpaceshipEntity.ShipParts.Protection;
 
-namespace Itmo.ObjectOrientedProgramming.Lab1.Spaceship;
+namespace Itmo.ObjectOrientedProgramming.Lab1.SpaceshipEntity;
 
 public abstract class Spaceship
 {
     protected Spaceship(ImpulseEngine engine, Deflector? deflector, Hull hull, bool hasAntiNitrineEmitter = false, JumpEngine? jumpEngine = null)
     {
-        Engine = engine;
+        ImpulseEngine = engine;
         Deflector = deflector;
         Hull = hull;
         HasAntiNitrineEmitter = hasAntiNitrineEmitter;
@@ -18,7 +18,7 @@ public abstract class Spaceship
     protected Spaceship(ImpulseEngine engine, JumpEngine? jumpEngine, Deflector? deflector, Hull hull, bool hasAntiNitrineEmitter = false)
         : this(engine, deflector, hull, hasAntiNitrineEmitter, jumpEngine) { }
 
-    public ImpulseEngine Engine { get; }
+    public ImpulseEngine ImpulseEngine { get; }
     public JumpEngine? JumpEngine { get; }
     public Deflector? Deflector { get; private set; }
     public Hull Hull { get; }

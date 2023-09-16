@@ -1,14 +1,16 @@
 using System;
-using Itmo.ObjectOrientedProgramming.Lab1.Spaceship.ShipParts.Protection;
+using Itmo.ObjectOrientedProgramming.Lab1.SpaceshipEntity;
+using Itmo.ObjectOrientedProgramming.Lab1.SpaceshipEntity.ShipParts.Engine;
+using Itmo.ObjectOrientedProgramming.Lab1.SpaceshipEntity.ShipParts.Protection;
 
-namespace Itmo.ObjectOrientedProgramming.Lab1.Route.Environment;
+namespace Itmo.ObjectOrientedProgramming.Lab1.Route.EnvironmentEntity;
 
-public class NormalSpace : IEnvironment
+public class NormalSpace : EnvironmentEntity.Environment
 {
     private readonly int _asteroidsCount;
     private readonly int _meteoritesCount;
 
-    public NormalSpace(int asteroidsCount, int meteoritesCount)
+    public NormalSpace(int asteroidsCount, int meteoritesCount, PathSectionDistance pathSectionDistance)
     {
         if (asteroidsCount < 0)
         {
@@ -20,11 +22,17 @@ public class NormalSpace : IEnvironment
             throw new ArgumentException("The number of meteorites cannot be less than zero");
         }
 
+        if (pathSectionDistance == PathSectionDistance.None)
+        {
+            throw new ArgumentException("The distance of path section can't be None");
+        }
+
         _asteroidsCount = asteroidsCount;
         _meteoritesCount = meteoritesCount;
+        Distance = pathSectionDistance;
     }
 
-    public RouteResult TryGetThrough(Spaceship.Spaceship? spaceship)
+    public override RouteReport TryGetThrough(Spaceship? spaceship)
     {
         if (spaceship is null)
         {
@@ -50,13 +58,18 @@ public class NormalSpace : IEnvironment
             Hull hull = spaceship.Hull;
             if (_asteroidsCount > hull.AsteroidsCountReflect || _meteoritesCount > hull.MeteoritesCountReflect)
             {
-                return RouteResult.ShipDestroyed;
+                return new RouteReport(RouteResult.ShipDestroyed);
             }
 
             hull.AsteroidsCountReflect -= _asteroidsCount;
             hull.MeteoritesCountReflect -= _meteoritesCount;
         }
 
-        return RouteResult.Success;
+        ImpulseEngine engine = spaceship.ImpulseEngine;
+        int travelTime = (int)Distance / engine.SpeedInLightYearsPerHour;
+        int spentFuel = engine.ActivePlasmaConsumptionPerStart
+                        + (engine.ActivePlasmaConsumptionPerLightYear * travelTime);
+
+        return new RouteReport(RouteResult.Success, travelTime, spentFuel);
     }
 }

@@ -1,8 +1,8 @@
-namespace Itmo.ObjectOrientedProgramming.Lab1.Spaceship.ShipParts.Protection;
+namespace Itmo.ObjectOrientedProgramming.Lab1.SpaceshipEntity.ShipParts.Protection;
 
-public class Hull : Protection
+public class Deflector : Protection
 {
-    public Hull(StrengthClasses strengthStrengthClass)
+    public Deflector(StrengthClasses strengthStrengthClass, bool isPhotonDeflectorSet = false)
     {
         switch (strengthStrengthClass)
         {
@@ -16,5 +16,12 @@ public class Hull : Protection
                 SetStrengthProperties(40, 10, 1);
                 break;
         }
+
+        if (isPhotonDeflectorSet)
+        {
+            AntimatterFlaresCountReflect = 3;
+        }
     }
+
+    public int AntimatterFlaresCountReflect { get; set; }
 }
