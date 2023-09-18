@@ -1,23 +1,24 @@
 using System;
 using System.Collections.Generic;
 using Itmo.ObjectOrientedProgramming.Lab1.RouteEntity;
+using Itmo.ObjectOrientedProgramming.Lab1.RouteEntity.RouteReporting;
 using Itmo.ObjectOrientedProgramming.Lab1.SpaceshipEntity;
 
 namespace Itmo.ObjectOrientedProgramming.Lab1.Service.Organizations;
 
 public static class SpaceResearchDepartment
 {
-    public static RouteResult GetTravelStatus(Route route, Spaceship spaceship)
+    public static RouteResult GetTravelStatus(Route route, Spaceship spaceship, ExchangeRate exchangeRate)
     {
         if (route == null)
         {
             throw new ArgumentNullException(nameof(route), "Route can't be null");
         }
 
-        return route.GetRouteReport(spaceship).Result;
+        return route.GetRouteReport(spaceship, exchangeRate).Result;
     }
 
-    public static Spaceship? FindBestSpaceshipForRoute(Route route, IEnumerable<Spaceship> spaceships)
+    public static Spaceship? FindBestSpaceshipForRoute(Route route, IEnumerable<Spaceship> spaceships, ExchangeRate exchangeRate)
     {
         if (route == null)
         {
@@ -30,10 +31,10 @@ public static class SpaceResearchDepartment
         }
 
         Spaceship? bestSpaceship = null;
-        int lowestPrice = int.MaxValue;
+        double lowestPrice = double.MaxValue;
         foreach (Spaceship ship in spaceships)
         {
-            RouteReport report = route.GetRouteReport(ship);
+            RouteReport report = route.GetRouteReport(ship, exchangeRate);
             if (report.Result != RouteResult.Success)
             {
                 continue;

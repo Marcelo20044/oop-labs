@@ -1,4 +1,6 @@
-using Itmo.ObjectOrientedProgramming.Lab1.SpaceshipEntity.ShipParts.Engine;
+using System;
+using Itmo.ObjectOrientedProgramming.Lab1.SpaceshipEntity.ShipParts.Engine.ImpulseEngineEntity;
+using Itmo.ObjectOrientedProgramming.Lab1.SpaceshipEntity.ShipParts.Engine.JumpEngineEntity;
 using Itmo.ObjectOrientedProgramming.Lab1.SpaceshipEntity.ShipParts.Protection;
 
 namespace Itmo.ObjectOrientedProgramming.Lab1.SpaceshipEntity;
@@ -27,5 +29,15 @@ public abstract class Spaceship
     public void DestroyDeflector()
     {
         Deflector = null;
+    }
+
+    public void SetPhotonDeflector()
+    {
+        if (Deflector is null)
+        {
+            throw new ArgumentNullException(nameof(Deflector), "Regular deflector is null. You can't set photon deflector without regular deflector");
+        }
+
+        Deflector.AntimatterFlaresCountReflect = 3;
     }
 }

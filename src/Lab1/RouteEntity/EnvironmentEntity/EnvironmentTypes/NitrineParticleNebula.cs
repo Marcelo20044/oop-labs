@@ -1,44 +1,44 @@
 using System;
+using Itmo.ObjectOrientedProgramming.Lab1.RouteEntity.RouteReporting;
 using Itmo.ObjectOrientedProgramming.Lab1.Service.Organizations;
 using Itmo.ObjectOrientedProgramming.Lab1.SpaceshipEntity;
-using Itmo.ObjectOrientedProgramming.Lab1.SpaceshipEntity.ShipParts.Engine;
+using Itmo.ObjectOrientedProgramming.Lab1.SpaceshipEntity.ShipParts.Engine.ImpulseEngineEntity;
 using Itmo.ObjectOrientedProgramming.Lab1.SpaceshipEntity.ShipParts.Protection;
 
-namespace Itmo.ObjectOrientedProgramming.Lab1.RouteEntity.EnvironmentEntity;
+namespace Itmo.ObjectOrientedProgramming.Lab1.RouteEntity.EnvironmentEntity.EnvironmentTypes;
 
-public class NitrineParticleNebulae : Environment
+public class NitrineParticleNebula : Environment
 {
     private readonly int _spaceWhalesCount;
 
-    public NitrineParticleNebulae(int spaceWhalesCount, PathSectionDistance pathSectionDistance)
+    public NitrineParticleNebula(int spaceWhalesCount)
     {
         if (_spaceWhalesCount < 0)
         {
             throw new ArgumentException("The number of space whales cannot be less than zero");
         }
 
-        if (pathSectionDistance == PathSectionDistance.None)
-        {
-            throw new ArgumentException("The distance of path section can't be None");
-        }
-
         _spaceWhalesCount = spaceWhalesCount;
-        Distance = pathSectionDistance;
     }
 
-    public override RouteReport TryGetThrough(Spaceship? spaceship)
+    public override RouteReport TryGetThrough(Spaceship? spaceship, ExchangeRate exchangeRate)
     {
         if (spaceship is null)
         {
             throw new ArgumentNullException(nameof(spaceship), "Spaceship can't be null");
         }
 
+        if (exchangeRate is null)
+        {
+            throw new ArgumentNullException(nameof(exchangeRate), "Exchange rate can't be null");
+        }
+
         // Data for report
         ImpulseEngine engine = spaceship.ImpulseEngine;
-        int travelTime = (int)Distance / engine.SpeedInLightYearsPerHour;
-        int spentFuel = engine.ActivePlasmaConsumptionPerStart
+        double travelTime = (double)Distance / engine.SpeedInLightYearsPerHour;
+        double spentFuel = engine.ActivePlasmaConsumptionPerStart
                         + (engine.ActivePlasmaConsumptionPerLightYear * travelTime);
-        int spentMoney = spentFuel * FuelExchange.ActivePlasmaPrice;
+        double spentMoney = spentFuel * exchangeRate.ActivePlasmaPrise;
 
         // Obstacle checking
         if (spaceship.HasAntiNitrineEmitter)
@@ -47,7 +47,7 @@ public class NitrineParticleNebulae : Environment
         }
 
         Deflector? deflector = spaceship.Deflector;
-        if (deflector is null || _spaceWhalesCount > deflector.AntimatterFlaresCountReflect)
+        if (deflector is null || _spaceWhalesCount > deflector.SpaceWhalesCountReflect)
         {
             return new RouteReport(RouteResult.ShipDestroyed);
         }

@@ -1,36 +1,42 @@
 using System;
+using Itmo.ObjectOrientedProgramming.Lab1.RouteEntity.RouteReporting;
 using Itmo.ObjectOrientedProgramming.Lab1.Service.Organizations;
 using Itmo.ObjectOrientedProgramming.Lab1.SpaceshipEntity;
-using Itmo.ObjectOrientedProgramming.Lab1.SpaceshipEntity.ShipParts.Engine;
+using Itmo.ObjectOrientedProgramming.Lab1.SpaceshipEntity.ShipParts.Engine.ImpulseEngineEntity;
 using Itmo.ObjectOrientedProgramming.Lab1.SpaceshipEntity.ShipParts.Protection;
 
-namespace Itmo.ObjectOrientedProgramming.Lab1.RouteEntity.EnvironmentEntity;
+namespace Itmo.ObjectOrientedProgramming.Lab1.RouteEntity.EnvironmentEntity.EnvironmentTypes;
 
 public class NebulaOfSpaceIncreasedDensity : Environment
 {
     private readonly int _antimatterFlaresCount;
 
-    public NebulaOfSpaceIncreasedDensity(int antimatterFlaresCount, PathSectionDistance pathSectionDistance)
+    public NebulaOfSpaceIncreasedDensity(int antimatterFlaresCount)
     {
         if (_antimatterFlaresCount < 0)
         {
             throw new ArgumentException("The number of antimatter flares cannot be less than zero");
         }
 
-        if (pathSectionDistance == PathSectionDistance.None)
-        {
-            throw new ArgumentException("The distance of path section can't be None");
-        }
-
         _antimatterFlaresCount = antimatterFlaresCount;
-        Distance = pathSectionDistance;
     }
 
-    public override RouteReport TryGetThrough(Spaceship? spaceship)
+    public override RouteReport TryGetThrough(Spaceship? spaceship, ExchangeRate exchangeRate)
     {
         if (spaceship is null)
         {
             throw new ArgumentNullException(nameof(spaceship), "Spaceship can't be null");
+        }
+
+        if (exchangeRate is null)
+        {
+            throw new ArgumentNullException(nameof(exchangeRate), "Exchange rate can't be null");
+        }
+
+        // The spaceship must have a jump engine
+        if (spaceship.JumpEngine is null)
+        {
+            return new RouteReport(RouteResult.ShipLoss);
         }
 
         // Obstacle checking
@@ -42,12 +48,6 @@ public class NebulaOfSpaceIncreasedDensity : Environment
 
         deflector.AntimatterFlaresCountReflect -= _antimatterFlaresCount;
 
-        // The spaceship must have a jump engine
-        if (spaceship.JumpEngine is null)
-        {
-            return new RouteReport(RouteResult.ShipLoss);
-        }
-
         // Checking the possibility of passing a subspace channel
         if (spaceship.JumpEngine.JumpDistance < (int)Distance)
         {
@@ -55,10 +55,10 @@ public class NebulaOfSpaceIncreasedDensity : Environment
         }
 
         ImpulseEngine engine = spaceship.ImpulseEngine;
-        int travelTime = (int)Distance / engine.SpeedInLightYearsPerHour;
-        int spentFuel = engine.ActivePlasmaConsumptionPerStart
+        double travelTime = (double)Distance / engine.SpeedInLightYearsPerHour;
+        double spentFuel = engine.ActivePlasmaConsumptionPerStart
                         + (engine.ActivePlasmaConsumptionPerLightYear * travelTime);
-        int spentMoney = spentFuel * FuelExchange.GravitationalMatterPrice;
+        double spentMoney = spentFuel * exchangeRate.GravitationalMatterPrice;
 
         return new RouteReport(RouteResult.Success, travelTime, spentFuel, spentMoney);
     }

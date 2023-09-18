@@ -1,4 +1,7 @@
 using System;
+using Itmo.ObjectOrientedProgramming.Lab1.RouteEntity.PathSectionEntity;
+using Itmo.ObjectOrientedProgramming.Lab1.RouteEntity.RouteReporting;
+using Itmo.ObjectOrientedProgramming.Lab1.Service.Organizations;
 using Itmo.ObjectOrientedProgramming.Lab1.SpaceshipEntity;
 
 namespace Itmo.ObjectOrientedProgramming.Lab1.RouteEntity.EnvironmentEntity;
@@ -6,6 +9,7 @@ namespace Itmo.ObjectOrientedProgramming.Lab1.RouteEntity.EnvironmentEntity;
 public abstract class Environment
 {
     private PathSectionDistance _distance;
+
     public PathSectionDistance Distance
     {
         get => _distance;
@@ -21,5 +25,5 @@ public abstract class Environment
         }
     }
 
-    public abstract RouteReport TryGetThrough(Spaceship? spaceship);
+    public abstract RouteReport TryGetThrough(Spaceship? spaceship, ExchangeRate exchangeRate);
 }

@@ -1,6 +1,6 @@
 using Itmo.ObjectOrientedProgramming.Lab1.RouteEntity.EnvironmentEntity;
 
-namespace Itmo.ObjectOrientedProgramming.Lab1.RouteEntity;
+namespace Itmo.ObjectOrientedProgramming.Lab1.RouteEntity.PathSectionEntity;
 
 public class PathSection
 {

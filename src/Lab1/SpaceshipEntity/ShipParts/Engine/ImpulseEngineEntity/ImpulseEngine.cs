@@ -1,4 +1,4 @@
-namespace Itmo.ObjectOrientedProgramming.Lab1.SpaceshipEntity.ShipParts.Engine;
+namespace Itmo.ObjectOrientedProgramming.Lab1.SpaceshipEntity.ShipParts.Engine.ImpulseEngineEntity;
 
 public abstract class ImpulseEngine
 {
@@ -12,5 +12,4 @@ public abstract class ImpulseEngine
     public int ActivePlasmaConsumptionPerLightYear { get; }
     public int ActivePlasmaConsumptionPerStart { get; }
     public int SpeedInLightYearsPerHour { get; }
-    public abstract void Start();
 }

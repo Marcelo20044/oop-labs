@@ -1,4 +1,4 @@
-using Itmo.ObjectOrientedProgramming.Lab1.SpaceshipEntity.ShipParts.Engine;
+using Itmo.ObjectOrientedProgramming.Lab1.SpaceshipEntity.ShipParts.Engine.ImpulseEngineEntity.ImpulseEngineModels;
 using Itmo.ObjectOrientedProgramming.Lab1.SpaceshipEntity.ShipParts.Protection;
 
 namespace Itmo.ObjectOrientedProgramming.Lab1.SpaceshipEntity.ShipModels;

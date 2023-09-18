@@ -2,10 +2,14 @@ using System;
 
 namespace Itmo.ObjectOrientedProgramming.Lab1.Service.Organizations;
 
+#pragma warning disable CA5394
+
 public static class FuelExchange
 {
-#pragma warning disable CA5394
-    public static int ActivePlasmaPrice => new Random().Next(60, 71);
-    public static int GravitationalMatterPrice => new Random().Next(85, 99);
-#pragma warning restore CA5394
+    public static ExchangeRate GetExchangeRate()
+    {
+        var random = new Random();
+        return new ExchangeRate(random.Next(60, 71), random.Next(80, 86));
+    }
 }
+#pragma warning restore CA5394

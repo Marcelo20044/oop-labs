@@ -1,4 +1,4 @@
-namespace Itmo.ObjectOrientedProgramming.Lab1.RouteEntity;
+namespace Itmo.ObjectOrientedProgramming.Lab1.RouteEntity.RouteReporting;
 
 public enum RouteResult
 {

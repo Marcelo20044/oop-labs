@@ -2,7 +2,7 @@ namespace Itmo.ObjectOrientedProgramming.Lab1.SpaceshipEntity.ShipParts.Protecti
 
 public class Deflector : Protection
 {
-    public Deflector(StrengthClasses strengthStrengthClass, bool isPhotonDeflectorSet = false)
+    public Deflector(StrengthClasses strengthStrengthClass)
     {
         switch (strengthStrengthClass)
         {
@@ -15,11 +15,6 @@ public class Deflector : Protection
             case StrengthClasses.Class3:
                 SetStrengthProperties(40, 10, 1);
                 break;
-        }
-
-        if (isPhotonDeflectorSet)
-        {
-            AntimatterFlaresCountReflect = 3;
         }
     }
 
