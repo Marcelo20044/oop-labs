@@ -1,0 +1,12 @@
+using Itmo.ObjectOrientedProgramming.Lab1.Entities.Spaceships.ShipParts.Engine.ImpulseEngine.ImpulseEngineModels;
+using Itmo.ObjectOrientedProgramming.Lab1.Entities.Spaceships.ShipParts.Engine.JumpEngine.JumpEngineModels;
+using Itmo.ObjectOrientedProgramming.Lab1.Entities.Spaceships.ShipParts.Protection;
+using Itmo.ObjectOrientedProgramming.Lab1.Models;
+
+namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Spaceships.ShipModels;
+
+public class StellaSpaceship : BaseSpaceship
+{
+    public StellaSpaceship()
+        : base(new ImpulseEngineC(), new Deflector(StrengthClasses.Class1), new Hull(StrengthClasses.Class1), jumpEngine: new OmegaJumpEngine()) { }
+}
