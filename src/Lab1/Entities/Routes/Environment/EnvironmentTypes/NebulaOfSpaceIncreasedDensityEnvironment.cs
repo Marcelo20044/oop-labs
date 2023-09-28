@@ -1,31 +1,32 @@
 using System;
 using Itmo.ObjectOrientedProgramming.Lab1.Entities.Spaceships;
-using Itmo.ObjectOrientedProgramming.Lab1.Entities.Spaceships.ShipParts.Engine.JumpEngine;
-using Itmo.ObjectOrientedProgramming.Lab1.Entities.Spaceships.ShipParts.Protection;
+using Itmo.ObjectOrientedProgramming.Lab1.Models.Distance;
 using Itmo.ObjectOrientedProgramming.Lab1.Models.RouteReporting;
+using Itmo.ObjectOrientedProgramming.Lab1.Services;
 using Itmo.ObjectOrientedProgramming.Lab1.Services.Organizations;
 
 namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Routes.Environment.EnvironmentTypes;
 
 public class NebulaOfSpaceIncreasedDensityEnvironment : BaseEnvironment
 {
-    private readonly int _antimatterFlaresCount;
-
-    public NebulaOfSpaceIncreasedDensityEnvironment(int antimatterFlaresCount)
+    public NebulaOfSpaceIncreasedDensityEnvironment(Distance distance, int antimatterFlaresCount)
+        : base(distance.GetDistance())
     {
-        if (_antimatterFlaresCount < 0)
+        if (AntimatterFlaresCount < 0)
         {
             throw new ArgumentException("The number of antimatter flares cannot be less than zero");
         }
 
-        _antimatterFlaresCount = antimatterFlaresCount;
+        AntimatterFlaresCount = antimatterFlaresCount;
     }
 
-    public override RouteReport TryGetThrough(BaseSpaceship? spaceship, ExchangeRate exchangeRate)
+    private int AntimatterFlaresCount { get; }
+
+    public override bool TryGetThrough(ISpaceship spaceship, ExchangeRate exchangeRate, out RouteReport report)
     {
         if (spaceship is null)
         {
-            throw new ArgumentNullException(nameof(spaceship), "BaseSpaceship can't be null");
+            throw new ArgumentNullException(nameof(spaceship), "Spaceship can't be null");
         }
 
         if (exchangeRate is null)
@@ -34,31 +35,36 @@ public class NebulaOfSpaceIncreasedDensityEnvironment : BaseEnvironment
         }
 
         // The spaceship must have a jump engine
-        if (spaceship.JumpEngine is null)
+        if (spaceship is not ISpaceshipWithJumpEngine spaceshipWithJumpEngine)
         {
-            return new RouteReport(RouteResult.ShipLoss);
+            report = new RouteReport(RouteResult.ShipLoss);
+            return false;
+        }
+
+        // Checking the possibility of passing a subspace channel
+        if (spaceshipWithJumpEngine.JumpEngine.JumpDistance < Distance)
+        {
+            report = new RouteReport(RouteResult.ShipLoss);
+            return false;
         }
 
         // Obstacle checking
-        Deflector? deflector = spaceship.Deflector;
-        if (deflector is null || _antimatterFlaresCount > deflector.AntimatterFlaresCountReflect)
+        if (AntimatterFlaresCount == 0)
         {
-            return new RouteReport(RouteResult.CrewDeath);
+            report = CalculatingCenter.GetSuccessReport(spaceshipWithJumpEngine.JumpEngine, Distance, exchangeRate);
+            return true;
         }
 
-        deflector.AntimatterFlaresCountReflect -= _antimatterFlaresCount;
-
-        // Checking the possibility of passing a subspace channel
-        if (spaceship.JumpEngine.JumpDistance < (int)Distance)
+        if (spaceshipWithJumpEngine is not ISpaceshipWithDeflector spaceshipWithDeflector
+            || AntimatterFlaresCount > spaceshipWithDeflector.Deflector.AntimatterFlaresCountReflect)
         {
-            return new RouteReport(RouteResult.ShipLoss);
+            report = new RouteReport(RouteResult.CrewDeath);
+            return false;
         }
 
-        BaseJumpEngine engine = spaceship.JumpEngine;
-        double travelTime = (double)Distance / engine.Speed;
-        double spentFuel = engine.GravitationalMatterConsumptionPerLightYear * travelTime;
-        double spentMoney = spentFuel * exchangeRate.GravitationalMatterPrice;
+        spaceshipWithDeflector.Deflector.AntimatterFlaresCountReflect -= AntimatterFlaresCount;
 
-        return new RouteReport(RouteResult.Success, travelTime, spentFuel, spentMoney);
+        report = CalculatingCenter.GetSuccessReport(spaceshipWithJumpEngine.JumpEngine, Distance, exchangeRate);
+        return true;
     }
 }

@@ -1,9 +1,12 @@
 using Itmo.ObjectOrientedProgramming.Lab1.Entities.Routes;
-using Itmo.ObjectOrientedProgramming.Lab1.Entities.Routes.Environment;
 using Itmo.ObjectOrientedProgramming.Lab1.Entities.Routes.Environment.EnvironmentTypes;
 using Itmo.ObjectOrientedProgramming.Lab1.Entities.Routes.PathSection;
 using Itmo.ObjectOrientedProgramming.Lab1.Entities.Spaceships;
 using Itmo.ObjectOrientedProgramming.Lab1.Entities.Spaceships.ShipModels;
+using Itmo.ObjectOrientedProgramming.Lab1.Entities.Spaceships.ShipParts.Engine.ImpulseEngine.ImpulseEngineModels;
+using Itmo.ObjectOrientedProgramming.Lab1.Entities.Spaceships.ShipParts.Engine.JumpEngine.JumpEngineModels;
+using Itmo.ObjectOrientedProgramming.Lab1.Entities.Spaceships.ShipParts.Protection;
+using Itmo.ObjectOrientedProgramming.Lab1.Models;
 using Itmo.ObjectOrientedProgramming.Lab1.Models.Distance;
 using Itmo.ObjectOrientedProgramming.Lab1.Models.RouteReporting;
 using Itmo.ObjectOrientedProgramming.Lab1.Services.Organizations;
@@ -19,11 +22,11 @@ public class SpaceResearchDepartmentTests
     [Fact]
     public void PleasureShuttleOnMediumDistanceInNebulaOfSpaceIncreasedDensity_ShouldGetLost()
     {
-        BaseSpaceship pleasureShuttle = new PleasureShuttleSpaceship();
+        ISpaceship pleasureShuttle = new PleasureShuttleSpaceship(new ImpulseEngineC(), new Hull(StrengthClasses.Class1));
 
         const int antimatterFlaresCount = 0;
-        BaseEnvironment baseEnvironment = new NebulaOfSpaceIncreasedDensityEnvironment(antimatterFlaresCount);
-        PathSection[] pathSections = { new(baseEnvironment, PathSectionDistance.Medium) };
+        var environment = new NebulaOfSpaceIncreasedDensityEnvironment(Distance.Medium, antimatterFlaresCount);
+        PathSection[] pathSections = { new(environment) };
         var route = new Route(pathSections);
 
         RouteResult expected = RouteResult.ShipLoss;
@@ -35,11 +38,11 @@ public class SpaceResearchDepartmentTests
     [Fact]
     public void AugurOnMediumDistanceInNebulaOfSpaceIncreasedDensity_ShouldGetLost()
     {
-        var augur = new AugurSpaceship();
+        ISpaceship augur = new AugurSpaceship(new ImpulseEngineE(), new AlphaJumpEngine(), new Deflector(StrengthClasses.Class3), new Hull(StrengthClasses.Class3));
 
         const int antimatterFlaresCount = 0;
-        BaseEnvironment baseEnvironment = new NebulaOfSpaceIncreasedDensityEnvironment(antimatterFlaresCount);
-        PathSection[] pathSections = { new(baseEnvironment, PathSectionDistance.Medium) };
+        var environment = new NebulaOfSpaceIncreasedDensityEnvironment(Distance.Medium, antimatterFlaresCount);
+        PathSection[] pathSections = { new(environment) };
         var route = new Route(pathSections);
 
         RouteResult expected = RouteResult.ShipLoss;
@@ -51,11 +54,11 @@ public class SpaceResearchDepartmentTests
     [Fact]
     public void VaklasInSubspaceChannelWithAntimatterFlare_CrewShouldDie()
     {
-        BaseSpaceship vaklas = new VaklasSpaceship();
+        ISpaceship vaklas = new VaklasSpaceship(new ImpulseEngineE(), new GammaJumpEngine(), new Deflector(StrengthClasses.Class1), new Hull(StrengthClasses.Class2));
 
         const int antimatterFlaresCount = 1;
-        BaseEnvironment baseEnvironment = new NebulaOfSpaceIncreasedDensityEnvironment(antimatterFlaresCount);
-        PathSection[] pathSections = { new(baseEnvironment, PathSectionDistance.Small) };
+        var environment = new NebulaOfSpaceIncreasedDensityEnvironment(Distance.Small, antimatterFlaresCount);
+        PathSection[] pathSections = { new(environment) };
         var route = new Route(pathSections);
 
         RouteResult expected = RouteResult.CrewDeath;
@@ -67,12 +70,12 @@ public class SpaceResearchDepartmentTests
     [Fact]
     public void VaklasWithPhotonDeflectorInSubspaceChannelWithAntimatterFlare_ShouldSuccess()
     {
-        BaseSpaceship vaklas = new VaklasSpaceship();
+        ISpaceshipWithDeflector vaklas = new VaklasSpaceship(new ImpulseEngineE(), new GammaJumpEngine(), new Deflector(StrengthClasses.Class1), new Hull(StrengthClasses.Class2));
         vaklas.SetPhotonDeflector();
 
         const int antimatterFlaresCount = 1;
-        BaseEnvironment baseEnvironment = new NebulaOfSpaceIncreasedDensityEnvironment(antimatterFlaresCount);
-        PathSection[] pathSections = { new(baseEnvironment, PathSectionDistance.Small) };
+        var environment = new NebulaOfSpaceIncreasedDensityEnvironment(Distance.Small, antimatterFlaresCount);
+        PathSection[] pathSections = { new(environment) };
         var route = new Route(pathSections);
 
         RouteResult expected = RouteResult.Success;
@@ -84,11 +87,11 @@ public class SpaceResearchDepartmentTests
     [Fact]
     public void VaklasInNitrineParticleNebulaWithSpaceWhale_ShouldGetDestroyed()
     {
-        BaseSpaceship vaklas = new VaklasSpaceship();
+        ISpaceship vaklas = new VaklasSpaceship(new ImpulseEngineE(), new GammaJumpEngine(), new Deflector(StrengthClasses.Class1), new Hull(StrengthClasses.Class2));
 
         const int spaceWhalesCount = 1;
-        BaseEnvironment baseEnvironment = new NitrineParticleNebulaEnvironment(spaceWhalesCount);
-        PathSection[] pathSections = { new(baseEnvironment, PathSectionDistance.Small) };
+        var environment = new NitrineParticleNebulaEnvironment(Distance.Small, spaceWhalesCount);
+        PathSection[] pathSections = { new(environment) };
         var route = new Route(pathSections);
 
         RouteResult expected = RouteResult.ShipDestroyed;
@@ -100,52 +103,52 @@ public class SpaceResearchDepartmentTests
     [Fact]
     public void AugurInNitrineParticleNebulaWithSpaceWhale_ShouldSuccessAndDeflectorGetDestroyed()
     {
-        BaseSpaceship augur = new AugurSpaceship();
+        ISpaceshipWithDeflector augur = new AugurSpaceship(new ImpulseEngineE(), new AlphaJumpEngine(), new Deflector(StrengthClasses.Class3), new Hull(StrengthClasses.Class3));
 
         const int spaceWhalesCount = 1;
-        BaseEnvironment baseEnvironment = new NitrineParticleNebulaEnvironment(spaceWhalesCount);
-        PathSection[] pathSections = { new(baseEnvironment, PathSectionDistance.Small) };
+        var environment = new NitrineParticleNebulaEnvironment(Distance.Small, spaceWhalesCount);
+        PathSection[] pathSections = { new(environment) };
         var route = new Route(pathSections);
 
         RouteResult expected = RouteResult.Success;
         RouteResult actual = SpaceResearchDepartment.GetTravelStatus(route, augur, exchangeRate);
 
         Assert.Equal(expected, actual);
-        Assert.Null(augur.Deflector);
+        Assert.True(augur.Deflector.IsDestroyed);
     }
 
     [Fact]
     public void MeridianInNitrineParticleNebulaWithSpaceWhale_ShouldSuccessAndDeflectorShouldBeIntact()
     {
-        BaseSpaceship meridian = new MeridianSpaceship();
+        ISpaceshipWithDeflector meridian = new MeridianSpaceship(new ImpulseEngineE(), new Deflector(StrengthClasses.Class2), new Hull(StrengthClasses.Class2), true);
 
         const int spaceWhalesCount = 1;
-        BaseEnvironment baseEnvironment = new NitrineParticleNebulaEnvironment(spaceWhalesCount);
-        PathSection[] pathSections = { new(baseEnvironment, PathSectionDistance.Small) };
+        var environment = new NitrineParticleNebulaEnvironment(Distance.Small, spaceWhalesCount);
+        PathSection[] pathSections = { new(environment) };
         var route = new Route(pathSections);
 
         RouteResult expected = RouteResult.Success;
         RouteResult actual = SpaceResearchDepartment.GetTravelStatus(route, meridian, exchangeRate);
 
         Assert.Equal(expected, actual);
-        Assert.NotNull(meridian.Deflector);
+        Assert.False(meridian.Deflector.IsDestroyed);
     }
 
     [Fact]
     public void PleasureShuttleAndVaklasOnShortDistanceInNormalSpace_PleasureShuttleShouldBeSelected()
     {
-        BaseSpaceship pleasureShuttle = new PleasureShuttleSpaceship();
-        BaseSpaceship vaklas = new VaklasSpaceship();
-        BaseSpaceship[] spaceships = { pleasureShuttle, vaklas };
+        ISpaceship pleasureShuttle = new PleasureShuttleSpaceship(new ImpulseEngineC(), new Hull(StrengthClasses.Class1));
+        ISpaceship vaklas = new VaklasSpaceship(new ImpulseEngineE(), new GammaJumpEngine(), new Deflector(StrengthClasses.Class1), new Hull(StrengthClasses.Class2));
+        ISpaceship[] spaceships = { pleasureShuttle, vaklas };
 
         const int asteroidsCount = 0;
         const int meteoritesCount = 0;
-        BaseEnvironment baseEnvironment = new NormalSpaceEnvironment(asteroidsCount, meteoritesCount);
-        PathSection[] pathSections = { new(baseEnvironment, PathSectionDistance.Small) };
+        var environment = new NormalSpaceEnvironment(Distance.Small, asteroidsCount, meteoritesCount);
+        PathSection[] pathSections = { new(environment) };
         var route = new Route(pathSections);
 
-        BaseSpaceship expected = pleasureShuttle;
-        BaseSpaceship? actual = SpaceResearchDepartment.FindBestSpaceshipForRoute(route, spaceships, exchangeRate);
+        ISpaceship expected = pleasureShuttle;
+        ISpaceship? actual = SpaceResearchDepartment.FindBestSpaceshipForRoute(route, spaceships, exchangeRate);
 
         Assert.Equal(expected, actual);
     }
@@ -153,17 +156,17 @@ public class SpaceResearchDepartmentTests
     [Fact]
     public void AugurAndStellaOnMediumDistanceInNebulaOfSpaceIncreasedDensity_StellaShouldBeSelected()
     {
-        BaseSpaceship augur = new AugurSpaceship();
-        BaseSpaceship stella = new StellaSpaceship();
-        BaseSpaceship[] spaceships = { augur, stella };
+        ISpaceship augur = new AugurSpaceship(new ImpulseEngineE(), new AlphaJumpEngine(), new Deflector(StrengthClasses.Class3), new Hull(StrengthClasses.Class3));
+        ISpaceship stella = new StellaSpaceship(new ImpulseEngineC(), new OmegaJumpEngine(), new Deflector(StrengthClasses.Class1), new Hull(StrengthClasses.Class1));
+        ISpaceship[] spaceships = { augur, stella };
 
         const int antimatterFlaresCount = 0;
-        BaseEnvironment baseEnvironment = new NebulaOfSpaceIncreasedDensityEnvironment(antimatterFlaresCount);
-        PathSection[] pathSections = { new(baseEnvironment, PathSectionDistance.Medium) };
+        var environment = new NebulaOfSpaceIncreasedDensityEnvironment(Distance.Medium, antimatterFlaresCount);
+        PathSection[] pathSections = { new(environment) };
         var route = new Route(pathSections);
 
-        BaseSpaceship expected = stella;
-        BaseSpaceship? actual = SpaceResearchDepartment.FindBestSpaceshipForRoute(route, spaceships, exchangeRate);
+        ISpaceship expected = stella;
+        ISpaceship? actual = SpaceResearchDepartment.FindBestSpaceshipForRoute(route, spaceships, exchangeRate);
 
         Assert.Equal(expected, actual);
     }
@@ -171,40 +174,40 @@ public class SpaceResearchDepartmentTests
     [Fact]
     public void PleasureShuttleAndVaklasInNitrineParticleNebula_VaklasShouldBeSelected()
     {
-        BaseSpaceship pleasureShuttle = new PleasureShuttleSpaceship();
-        BaseSpaceship vaklas = new VaklasSpaceship();
-        BaseSpaceship[] spaceships = { pleasureShuttle, vaklas };
+        ISpaceship pleasureShuttle = new PleasureShuttleSpaceship(new ImpulseEngineC(), new Hull(StrengthClasses.Class1));
+        ISpaceship vaklas = new VaklasSpaceship(new ImpulseEngineE(), new GammaJumpEngine(), new Deflector(StrengthClasses.Class1), new Hull(StrengthClasses.Class2));
+        ISpaceship[] spaceships = { pleasureShuttle, vaklas };
 
         const int spaceWhalesCount = 0;
-        BaseEnvironment baseEnvironment = new NitrineParticleNebulaEnvironment(spaceWhalesCount);
-        PathSection[] pathSections = { new(baseEnvironment, PathSectionDistance.Small) };
+        var environment = new NitrineParticleNebulaEnvironment(Distance.Small, spaceWhalesCount);
+        PathSection[] pathSections = { new(environment) };
         var route = new Route(pathSections);
 
-        BaseSpaceship expected = vaklas;
-        BaseSpaceship? actual = SpaceResearchDepartment.FindBestSpaceshipForRoute(route, spaceships, exchangeRate);
+        ISpaceship expected = pleasureShuttle;
+        ISpaceship? actual = SpaceResearchDepartment.FindBestSpaceshipForRoute(route, spaceships, exchangeRate);
 
         Assert.Equal(expected, actual);
     }
 
     // Npn - Nitrine Particle Nebula, Ns - Normal Space
     [Fact]
-    public void MeridianInNsThenNpnThenNsWith3MeteoritesAnd10AsteroidsAnd2SpaceWhales_VShouldSuccess()
+    public void MeridianInNsThenNpnThenNsWith4MeteoritesAnd10AsteroidsAnd2SpaceWhales_VShouldSuccess()
     {
-        BaseSpaceship meridian = new MeridianSpaceship();
+        ISpaceship meridian = new MeridianSpaceship(new ImpulseEngineE(), new Deflector(StrengthClasses.Class2), new Hull(StrengthClasses.Class2), true);
 
         const int asteroidsCountSection1 = 5;
-        const int meteoritesCountSection1 = 2;
-        BaseEnvironment baseEnvironmentSection1 = new NormalSpaceEnvironment(asteroidsCountSection1, meteoritesCountSection1);
-        var section1 = new PathSection(baseEnvironmentSection1, PathSectionDistance.Small);
+        const int meteoritesCountSection1 = 3;
+        var environmentSection1 = new NormalSpaceEnvironment(Distance.Small, asteroidsCountSection1, meteoritesCountSection1);
+        var section1 = new PathSection(environmentSection1);
 
         const int spaceWhalesCountSection2 = 2;
-        BaseEnvironment baseEnvironmentSection2 = new NitrineParticleNebulaEnvironment(spaceWhalesCountSection2);
-        var section2 = new PathSection(baseEnvironmentSection2, PathSectionDistance.Small);
+        var environmentSection2 = new NitrineParticleNebulaEnvironment(Distance.Small, spaceWhalesCountSection2);
+        var section2 = new PathSection(environmentSection2);
 
         const int asteroidsCountSection3 = 5;
         const int meteoritesCountSection3 = 1;
-        BaseEnvironment baseEnvironmentSection3 = new NormalSpaceEnvironment(asteroidsCountSection3, meteoritesCountSection3);
-        var section3 = new PathSection(baseEnvironmentSection3, PathSectionDistance.Small);
+        var environmentSection3 = new NormalSpaceEnvironment(Distance.Small, asteroidsCountSection3, meteoritesCountSection3);
+        var section3 = new PathSection(environmentSection3);
 
         PathSection[] pathSections = { section1, section2, section3 };
         var route = new Route(pathSections);

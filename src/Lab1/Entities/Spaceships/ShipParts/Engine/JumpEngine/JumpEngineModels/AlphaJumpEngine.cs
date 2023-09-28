@@ -2,6 +2,9 @@ namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Spaceships.ShipParts.Engi
 
 public class AlphaJumpEngine : BaseJumpEngine
 {
+    private const int JumpDistanceInLightYears = 25;
+    private const int FuelConsumptionPerLightYear = 25;
+    private const int SpeedInLightYearsPerHour = 50;
     public AlphaJumpEngine()
-        : base(25, 25, 50) { }
+        : base(JumpDistanceInLightYears, FuelConsumptionPerLightYear, SpeedInLightYearsPerHour) { }
 }

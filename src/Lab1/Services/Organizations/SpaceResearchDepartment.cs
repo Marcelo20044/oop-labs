@@ -8,31 +8,31 @@ namespace Itmo.ObjectOrientedProgramming.Lab1.Services.Organizations;
 
 public static class SpaceResearchDepartment
 {
-    public static RouteResult GetTravelStatus(Route route, BaseSpaceship baseSpaceship, ExchangeRate exchangeRate)
+    public static RouteResult GetTravelStatus(Route route, ISpaceship spaceship, ExchangeRate exchangeRate)
     {
-        if (route == null)
+        if (route is null)
         {
             throw new ArgumentNullException(nameof(route), "Route can't be null");
         }
 
-        return route.GetRouteReport(baseSpaceship, exchangeRate).Result;
+        return route.GetRouteReport(spaceship, exchangeRate).Result;
     }
 
-    public static BaseSpaceship? FindBestSpaceshipForRoute(Route route, IEnumerable<BaseSpaceship> spaceships, ExchangeRate exchangeRate)
+    public static ISpaceship? FindBestSpaceshipForRoute(Route route, IEnumerable<ISpaceship> spaceships, ExchangeRate exchangeRate)
     {
-        if (route == null)
+        if (route is null)
         {
             throw new ArgumentNullException(nameof(route), "Route can't be null");
         }
 
-        if (spaceships == null)
+        if (spaceships is null)
         {
             throw new ArgumentNullException(nameof(spaceships), "Spaceships can't be null");
         }
 
-        BaseSpaceship? bestSpaceship = null;
+        ISpaceship? bestSpaceship = null;
         double lowestPrice = double.MaxValue;
-        foreach (BaseSpaceship ship in spaceships)
+        foreach (ISpaceship ship in spaceships)
         {
             RouteReport report = route.GetRouteReport(ship, exchangeRate);
             if (report.Result != RouteResult.Success)
@@ -40,11 +40,9 @@ public static class SpaceResearchDepartment
                 continue;
             }
 
-            if (report.SpentMoney < lowestPrice)
-            {
-                bestSpaceship = ship;
-                lowestPrice = report.SpentMoney;
-            }
+            if (report.SpentMoney >= lowestPrice) continue;
+            bestSpaceship = ship;
+            lowestPrice = report.SpentMoney;
         }
 
         return bestSpaceship;

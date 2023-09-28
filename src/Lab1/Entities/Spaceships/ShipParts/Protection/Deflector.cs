@@ -4,20 +4,28 @@ namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Spaceships.ShipParts.Prot
 
 public class Deflector : BaseProtection
 {
-    public Deflector(StrengthClasses strengthStrengthClass)
+    public Deflector(StrengthClasses strengthClass)
     {
-        switch (strengthStrengthClass)
+        int asteroidsCountCanReflect = 2;
+        int meteoritesCountCanReflect = 1;
+        int spaceWhalesCountCanReflect = 0;
+
+        switch (strengthClass)
         {
             case StrengthClasses.Class1:
-                SetStrengthProperties(2, 1, 0);
                 break;
             case StrengthClasses.Class2:
-                SetStrengthProperties(10, 3, 0);
+                asteroidsCountCanReflect = 10;
+                meteoritesCountCanReflect = 3;
                 break;
             case StrengthClasses.Class3:
-                SetStrengthProperties(40, 10, 1);
+                asteroidsCountCanReflect = 40;
+                meteoritesCountCanReflect = 10;
+                spaceWhalesCountCanReflect = 1;
                 break;
         }
+
+        SetStrengthProperties(asteroidsCountCanReflect, meteoritesCountCanReflect, spaceWhalesCountCanReflect, strengthClass);
     }
 
     public int AntimatterFlaresCountReflect { get; set; }

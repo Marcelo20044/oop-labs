@@ -4,19 +4,26 @@ namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Spaceships.ShipParts.Prot
 
 public class Hull : BaseProtection
 {
-    public Hull(StrengthClasses strengthStrengthClass)
+    public Hull(StrengthClasses strengthClass)
     {
-        switch (strengthStrengthClass)
+        int asteroidsCountCanReflect = 1;
+        int meteoritesCountCanReflect = 0;
+        int spaceWhalesCountCanReflect = 0;
+
+        switch (strengthClass)
         {
             case StrengthClasses.Class1:
-                SetStrengthProperties(2, 1, 0);
                 break;
             case StrengthClasses.Class2:
-                SetStrengthProperties(10, 3, 0);
+                asteroidsCountCanReflect = 5;
+                meteoritesCountCanReflect = 2;
                 break;
             case StrengthClasses.Class3:
-                SetStrengthProperties(40, 10, 1);
+                asteroidsCountCanReflect = 20;
+                meteoritesCountCanReflect = 5;
                 break;
         }
+
+        SetStrengthProperties(asteroidsCountCanReflect, meteoritesCountCanReflect, spaceWhalesCountCanReflect, strengthClass);
     }
 }

@@ -1,15 +1,13 @@
 using Itmo.ObjectOrientedProgramming.Lab1.Entities.Routes.Environment;
-using Itmo.ObjectOrientedProgramming.Lab1.Models.Distance;
 
 namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Routes.PathSection;
 
 public class PathSection
 {
-    public PathSection(BaseEnvironment baseEnvironment, PathSectionDistance pathSectionDistance)
+    public PathSection(BaseEnvironment environment)
     {
-        BaseEnvironment = baseEnvironment;
-        BaseEnvironment.Distance = pathSectionDistance;
+        Environment = environment;
     }
 
-    public BaseEnvironment BaseEnvironment { get; }
+    public BaseEnvironment Environment { get; }
 }

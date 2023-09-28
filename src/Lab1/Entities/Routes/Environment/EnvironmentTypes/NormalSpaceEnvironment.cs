@@ -1,18 +1,17 @@
 using System;
 using Itmo.ObjectOrientedProgramming.Lab1.Entities.Spaceships;
-using Itmo.ObjectOrientedProgramming.Lab1.Entities.Spaceships.ShipParts.Engine.ImpulseEngine;
 using Itmo.ObjectOrientedProgramming.Lab1.Entities.Spaceships.ShipParts.Protection;
+using Itmo.ObjectOrientedProgramming.Lab1.Models.Distance;
 using Itmo.ObjectOrientedProgramming.Lab1.Models.RouteReporting;
+using Itmo.ObjectOrientedProgramming.Lab1.Services;
 using Itmo.ObjectOrientedProgramming.Lab1.Services.Organizations;
 
 namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Routes.Environment.EnvironmentTypes;
 
 public class NormalSpaceEnvironment : BaseEnvironment
 {
-    private readonly int _asteroidsCount;
-    private readonly int _meteoritesCount;
-
-    public NormalSpaceEnvironment(int asteroidsCount, int meteoritesCount)
+    public NormalSpaceEnvironment(Distance distance, int asteroidsCount, int meteoritesCount)
+        : base(distance.GetDistance())
     {
         if (asteroidsCount < 0)
         {
@@ -24,15 +23,18 @@ public class NormalSpaceEnvironment : BaseEnvironment
             throw new ArgumentException("The number of meteorites cannot be less than zero");
         }
 
-        _asteroidsCount = asteroidsCount;
-        _meteoritesCount = meteoritesCount;
+        AsteroidsCount = asteroidsCount;
+        MeteoritesCount = meteoritesCount;
     }
 
-    public override RouteReport TryGetThrough(BaseSpaceship? spaceship, ExchangeRate exchangeRate)
+    private int AsteroidsCount { get; }
+    private int MeteoritesCount { get; }
+
+    public override bool TryGetThrough(ISpaceship spaceship, ExchangeRate exchangeRate, out RouteReport report)
     {
         if (spaceship is null)
         {
-            throw new ArgumentNullException(nameof(spaceship), "BaseSpaceship can't be null");
+            throw new ArgumentNullException(nameof(spaceship), "Spaceship can't be null");
         }
 
         if (exchangeRate is null)
@@ -41,43 +43,40 @@ public class NormalSpaceEnvironment : BaseEnvironment
         }
 
         // Obstacle checking
-        Deflector? deflector = spaceship.Deflector;
-        if (deflector is not null)
+        if (AsteroidsCount == 0 && MeteoritesCount == 0)
         {
-            if (_asteroidsCount > deflector.AsteroidsCountReflect ||
-                _meteoritesCount > deflector.MeteoritesCountReflect)
-            {
-                spaceship.DestroyDeflector();
-            }
-            else
-            {
-                deflector.AsteroidsCountReflect -= _asteroidsCount;
-                deflector.MeteoritesCountReflect -= _meteoritesCount;
-                if (deflector.AsteroidsCountReflect == 0 && deflector.MeteoritesCountReflect == 0)
-                {
-                    spaceship.DestroyDeflector();
-                }
-            }
+            report = CalculatingCenter.GetSuccessReport(spaceship.BaseImpulseEngine, Distance, exchangeRate);
+            return true;
+        }
+
+        if (spaceship is not ISpaceshipWithDeflector spaceshipWithDeflector)
+        {
+            report = new RouteReport(RouteResult.ShipDestroyed);
+            return false;
+        }
+
+        Deflector deflector = spaceshipWithDeflector.Deflector;
+        if (!deflector.IsDestroyed)
+        {
+            deflector.AsteroidsCountReflect -= AsteroidsCount;
+            deflector.MeteoritesCountReflect -= MeteoritesCount;
+            if (deflector.AsteroidsCountReflect < 0 || deflector.MeteoritesCountReflect < 0) deflector.Destroy();
         }
         else
         {
             Hull hull = spaceship.Hull;
-            if (_asteroidsCount > hull.AsteroidsCountReflect
-                || _meteoritesCount > hull.MeteoritesCountReflect)
+            if (hull.IsDestroyed)
             {
-                return new RouteReport(RouteResult.ShipDestroyed);
+                report = new RouteReport(RouteResult.ShipDestroyed);
+                return false;
             }
 
-            hull.AsteroidsCountReflect -= _asteroidsCount;
-            hull.MeteoritesCountReflect -= _meteoritesCount;
+            hull.AsteroidsCountReflect -= AsteroidsCount;
+            hull.MeteoritesCountReflect -= MeteoritesCount;
+            if (hull.AsteroidsCountReflect <= 0 || hull.MeteoritesCountReflect <= 0) hull.Destroy();
         }
 
-        BaseImpulseEngine engine = spaceship.BaseImpulseEngine;
-        double travelTime = (double)Distance / engine.Speed;
-        double spentFuel = engine.ActivePlasmaConsumptionPerStart
-                        + (engine.ActivePlasmaConsumptionPerLightYear * travelTime);
-        double spentMoney = spentFuel * exchangeRate.ActivePlasmaPrise;
-
-        return new RouteReport(RouteResult.Success, travelTime, spentFuel, spentMoney);
+        report = CalculatingCenter.GetSuccessReport(spaceship.BaseImpulseEngine, Distance, exchangeRate);
+        return true;
     }
 }

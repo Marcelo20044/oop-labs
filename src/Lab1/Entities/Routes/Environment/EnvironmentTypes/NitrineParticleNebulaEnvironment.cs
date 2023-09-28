@@ -1,31 +1,32 @@
 using System;
 using Itmo.ObjectOrientedProgramming.Lab1.Entities.Spaceships;
-using Itmo.ObjectOrientedProgramming.Lab1.Entities.Spaceships.ShipParts.Engine.ImpulseEngine;
-using Itmo.ObjectOrientedProgramming.Lab1.Entities.Spaceships.ShipParts.Protection;
+using Itmo.ObjectOrientedProgramming.Lab1.Models.Distance;
 using Itmo.ObjectOrientedProgramming.Lab1.Models.RouteReporting;
+using Itmo.ObjectOrientedProgramming.Lab1.Services;
 using Itmo.ObjectOrientedProgramming.Lab1.Services.Organizations;
 
 namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Routes.Environment.EnvironmentTypes;
 
 public class NitrineParticleNebulaEnvironment : BaseEnvironment
 {
-    private readonly int _spaceWhalesCount;
-
-    public NitrineParticleNebulaEnvironment(int spaceWhalesCount)
+    public NitrineParticleNebulaEnvironment(Distance distance, int spaceWhalesCount)
+        : base(distance.GetDistance())
     {
-        if (_spaceWhalesCount < 0)
+        if (SpaceWhalesCount < 0)
         {
             throw new ArgumentException("The number of space whales cannot be less than zero");
         }
 
-        _spaceWhalesCount = spaceWhalesCount;
+        SpaceWhalesCount = spaceWhalesCount;
     }
 
-    public override RouteReport TryGetThrough(BaseSpaceship? spaceship, ExchangeRate exchangeRate)
+    private int SpaceWhalesCount { get; }
+
+    public override bool TryGetThrough(ISpaceship spaceship, ExchangeRate exchangeRate, out RouteReport report)
     {
         if (spaceship is null)
         {
-            throw new ArgumentNullException(nameof(spaceship), "BaseSpaceship can't be null");
+            throw new ArgumentNullException(nameof(spaceship), "Spaceship can't be null");
         }
 
         if (exchangeRate is null)
@@ -33,26 +34,33 @@ public class NitrineParticleNebulaEnvironment : BaseEnvironment
             throw new ArgumentNullException(nameof(exchangeRate), "Exchange rate can't be null");
         }
 
-        // Data for report
-        BaseImpulseEngine engine = spaceship.BaseImpulseEngine;
-        double travelTime = (double)Distance / engine.Speed;
-        double spentFuel = engine.ActivePlasmaConsumptionPerStart
-                        + (engine.ActivePlasmaConsumptionPerLightYear * travelTime);
-        double spentMoney = spentFuel * exchangeRate.ActivePlasmaPrise;
-
         // Obstacle checking
         if (spaceship.HasAntiNitrineEmitter)
         {
-            return new RouteReport(RouteResult.Success, travelTime, spentFuel, spentMoney);
+            report = CalculatingCenter.GetSuccessReport(spaceship.BaseImpulseEngine, Distance, exchangeRate);
+            return true;
         }
 
-        Deflector? deflector = spaceship.Deflector;
-        if (deflector is null || _spaceWhalesCount > deflector.SpaceWhalesCountReflect)
+        if (SpaceWhalesCount == 0)
         {
-            return new RouteReport(RouteResult.ShipDestroyed);
+            report = CalculatingCenter.GetSuccessReport(spaceship.BaseImpulseEngine, Distance, exchangeRate);
+            return true;
         }
 
-        spaceship.DestroyDeflector();
-        return new RouteReport(RouteResult.Success, travelTime, spentFuel, spentMoney);
+        if (spaceship is not ISpaceshipWithDeflector spaceshipWithDeflector
+            || SpaceWhalesCount > spaceshipWithDeflector.Deflector.SpaceWhalesCountReflect)
+        {
+            report = new RouteReport(RouteResult.ShipDestroyed);
+            return false;
+        }
+
+        spaceshipWithDeflector.Deflector.SpaceWhalesCountReflect -= SpaceWhalesCount;
+        if (spaceshipWithDeflector.Deflector.SpaceWhalesCountReflect == 0)
+        {
+            spaceshipWithDeflector.Deflector.Destroy();
+        }
+
+        report = CalculatingCenter.GetSuccessReport(spaceship.BaseImpulseEngine, Distance, exchangeRate);
+        return true;
     }
 }

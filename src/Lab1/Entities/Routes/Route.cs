@@ -12,9 +12,9 @@ public class Route
         PathSections = pathSections;
     }
 
-    public IEnumerable<PathSection.PathSection> PathSections { get; }
+    private IEnumerable<PathSection.PathSection> PathSections { get; }
 
-    public RouteReport GetRouteReport(BaseSpaceship baseSpaceship, ExchangeRate exchangeRate)
+    public RouteReport GetRouteReport(ISpaceship spaceship, ExchangeRate exchangeRate)
     {
         double generalTravelTime = 0;
         double generalFuelSpent = 0;
@@ -22,8 +22,7 @@ public class Route
 
         foreach (PathSection.PathSection pathSection in PathSections)
         {
-            RouteReport report = pathSection.BaseEnvironment.TryGetThrough(baseSpaceship, exchangeRate);
-            if (report.Result != RouteResult.Success)
+            if (!pathSection.Environment.TryGetThrough(spaceship, exchangeRate, out RouteReport report))
             {
                 return report;
             }

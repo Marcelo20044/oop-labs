@@ -2,6 +2,9 @@ namespace Itmo.ObjectOrientedProgramming.Lab1.Entities.Spaceships.ShipParts.Engi
 
 public class ImpulseEngineE : BaseImpulseEngine
 {
+    private const int FuelConsumptionPerLightYear = 320;
+    private const int FuelConsumptionPerStart = 50;
+    private const int SpeedInLightYearsPerHour = 40;
     public ImpulseEngineE()
-        : base(320, 50, 40) { }
+        : base(FuelConsumptionPerLightYear, FuelConsumptionPerStart, SpeedInLightYearsPerHour) { }
 }
