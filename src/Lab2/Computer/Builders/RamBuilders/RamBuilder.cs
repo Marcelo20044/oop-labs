@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Itmo.ObjectOrientedProgramming.Lab2.Computer.Entities;
+using Itmo.ObjectOrientedProgramming.Lab2.Computer.Entities.ComputerComponents;
 using Itmo.ObjectOrientedProgramming.Lab2.Computer.Models;
 using Itmo.ObjectOrientedProgramming.Lab2.Exceptions;
 
@@ -12,7 +12,7 @@ public class RamBuilder : IRamBuilder
     private int _availableMemory;
     private int _powerConsumption;
     private string? _ddrVersion;
-    private RamFormFactor _formFactor;
+    private FormFactor _formFactor;
 
     public IRamBuilder WithAvailableMemory(int availableMemory)
     {
@@ -32,7 +32,7 @@ public class RamBuilder : IRamBuilder
         return this;
     }
 
-    public IRamBuilder WithFormFactor(RamFormFactor formFactor)
+    public IRamBuilder WithFormFactor(FormFactor formFactor)
     {
         _formFactor = formFactor;
         return this;

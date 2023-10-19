@@ -1,4 +1,4 @@
-namespace Itmo.ObjectOrientedProgramming.Lab2.Computer.Entities;
+namespace Itmo.ObjectOrientedProgramming.Lab2.Computer.Entities.ComputerComponents;
 
 #pragma warning disable CA1040
 

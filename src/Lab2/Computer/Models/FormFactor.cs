@@ -1,7 +1,3 @@
 namespace Itmo.ObjectOrientedProgramming.Lab2.Computer.Models;
 
-public enum RamFormFactor
-{
-    Dimm,
-    SoDimm,
-}
+public record FormFactor(string Name, Dimensions Dimensions);

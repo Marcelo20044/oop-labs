@@ -1,6 +1,8 @@
+using Itmo.ObjectOrientedProgramming.Lab2.Computer.Builders.CpuBuilders;
 using Itmo.ObjectOrientedProgramming.Lab2.Computer.Models;
+using Itmo.ObjectOrientedProgramming.Lab2.Exceptions;
 
-namespace Itmo.ObjectOrientedProgramming.Lab2.Computer.Entities;
+namespace Itmo.ObjectOrientedProgramming.Lab2.Computer.Entities.ComputerComponents;
 
 public class Cpu : IComputerComponent
 {
@@ -29,4 +31,19 @@ public class Cpu : IComputerComponent
     public int PowerConsumption { get; }
     public bool HasVideoCore { get; }
     public Socket Socket { get; }
+
+    public ICpuBuilder Direct(ICpuBuilder builder)
+    {
+        if (builder is null) throw new BuilderNullException(nameof(builder));
+
+        builder
+            .WithCoresFrequency(CoresFrequency)
+            .WithCoresCount(CoresCount)
+            .WithSupportedMemoryFrequency(SupportedMemoryFrequency)
+            .WithTpd(Tpd)
+            .WithPowerConsumption(PowerConsumption)
+            .WithSocket(Socket);
+
+        return HasVideoCore ? builder.WithVideoCore() : builder;
+    }
 }

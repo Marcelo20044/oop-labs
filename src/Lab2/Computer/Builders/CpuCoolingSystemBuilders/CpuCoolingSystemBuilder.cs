@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Itmo.ObjectOrientedProgramming.Lab2.Computer.Entities;
+using Itmo.ObjectOrientedProgramming.Lab2.Computer.Entities.ComputerComponents;
 using Itmo.ObjectOrientedProgramming.Lab2.Computer.Models;
 using Itmo.ObjectOrientedProgramming.Lab2.Exceptions;
 

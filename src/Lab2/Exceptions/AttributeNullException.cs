@@ -4,8 +4,6 @@ namespace Itmo.ObjectOrientedProgramming.Lab2.Exceptions;
 
 public class AttributeNullException : ArgumentNullException
 {
-    public AttributeNullException() { }
-
     public AttributeNullException(string paramName)
         : base(paramName)
     {
@@ -18,6 +16,10 @@ public class AttributeNullException : ArgumentNullException
 
     public AttributeNullException(string message, Exception innerException)
         : base(message, innerException)
+    {
+    }
+
+    public AttributeNullException()
     {
     }
 }

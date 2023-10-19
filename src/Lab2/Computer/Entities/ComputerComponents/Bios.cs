@@ -1,7 +1,8 @@
 using System.Collections.Generic;
+using Itmo.ObjectOrientedProgramming.Lab2.Computer.Extensions;
 using Itmo.ObjectOrientedProgramming.Lab2.Exceptions;
 
-namespace Itmo.ObjectOrientedProgramming.Lab2.Computer.Entities;
+namespace Itmo.ObjectOrientedProgramming.Lab2.Computer.Entities.ComputerComponents;
 
 public class Bios : IComputerComponent
 {
@@ -17,6 +18,17 @@ public class Bios : IComputerComponent
     public IReadOnlyCollection<Cpu> SupportedProcessors { get; }
 
     public static BiosBuilder Builder() => new();
+
+    public BiosBuilder Direct(BiosBuilder builder)
+    {
+        if (builder is null) throw new BuilderNullException(nameof(builder));
+
+        SupportedProcessors.ForEach(p => builder.AddSupportedProcessor(p));
+
+        return builder
+            .WithType(Type)
+            .WithVersion(Version);
+    }
 
     // Stateful constructor builder for Bios
     public class BiosBuilder

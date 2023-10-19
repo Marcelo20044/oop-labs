@@ -1,4 +1,4 @@
-using Itmo.ObjectOrientedProgramming.Lab2.Computer.Entities;
+using Itmo.ObjectOrientedProgramming.Lab2.Computer.Entities.ComputerComponents;
 using Itmo.ObjectOrientedProgramming.Lab2.Computer.Models;
 
 namespace Itmo.ObjectOrientedProgramming.Lab2.Computer.Builders.CpuBuilders;

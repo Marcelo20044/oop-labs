@@ -1,15 +1,18 @@
 using System.Collections.Generic;
+using Itmo.ObjectOrientedProgramming.Lab2.Computer.Builders.RamBuilders;
+using Itmo.ObjectOrientedProgramming.Lab2.Computer.Extensions;
 using Itmo.ObjectOrientedProgramming.Lab2.Computer.Models;
+using Itmo.ObjectOrientedProgramming.Lab2.Exceptions;
 
-namespace Itmo.ObjectOrientedProgramming.Lab2.Computer.Entities;
+namespace Itmo.ObjectOrientedProgramming.Lab2.Computer.Entities.ComputerComponents;
 
-public class Ram
+public class Ram : IComputerComponent
 {
     public Ram(
         int availableMemory,
         int powerConsumption,
         string ddrVersion,
-        RamFormFactor formFactor,
+        FormFactor formFactor,
         IReadOnlyCollection<FrequencyAndVoltage> supportedFrequencyAndVoltagesPairs,
         IReadOnlyCollection<XmpProfile> availableXmpProfiles)
     {
@@ -24,7 +27,21 @@ public class Ram
     public int AvailableMemory { get; }
     public int PowerConsumption { get; }
     public string DdrVersion { get; }
-    public RamFormFactor FormFactor { get; }
+    public FormFactor FormFactor { get; }
     public IReadOnlyCollection<FrequencyAndVoltage> SupportedFrequencyAndVoltagesPairs { get; }
     public IReadOnlyCollection<XmpProfile> AvailableXmpProfiles { get; }
+
+    public IRamBuilder Direct(IRamBuilder builder)
+    {
+        if (builder is null) throw new BuilderNullException(nameof(builder));
+
+        AvailableXmpProfiles.ForEach(p => builder.AddAvailableXmpProfiles(p));
+        SupportedFrequencyAndVoltagesPairs.ForEach(p => builder.AddSupportedRamPairs(p));
+
+        return builder
+            .WithAvailableMemory(AvailableMemory)
+            .WithPowerConsumption(PowerConsumption)
+            .WithDdrVersion(DdrVersion)
+            .WithFormFactor(FormFactor);
+    }
 }
