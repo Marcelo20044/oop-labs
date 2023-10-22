@@ -16,6 +16,7 @@ public class Hdd : IComputerComponent
     public int SpindleSpeed { get; }
     public int PowerConsumption { get; }
 
+    // Debuilder for getting HDD builder based on finished one
     public IHddBuilder Direct(IHddBuilder builder)
     {
         if (builder is null) throw new BuilderNullException(nameof(builder));

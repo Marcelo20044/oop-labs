@@ -12,7 +12,7 @@ public class RamBuilder : IRamBuilder
     private int _availableMemory;
     private int _powerConsumption;
     private string? _ddrVersion;
-    private FormFactor _formFactor;
+    private FormFactor? _formFactor;
 
     public IRamBuilder WithAvailableMemory(int availableMemory)
     {
@@ -56,7 +56,7 @@ public class RamBuilder : IRamBuilder
             _availableMemory,
             _powerConsumption,
             _ddrVersion ?? throw new AttributeNullException(nameof(_ddrVersion)),
-            _formFactor,
+            _formFactor ?? throw new AttributeNullException(nameof(_formFactor)),
             _supportedFrequencyAndVoltagePairs,
             _availableXmpProfiles);
     }

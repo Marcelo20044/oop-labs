@@ -23,6 +23,7 @@ public class Ssd : IComputerComponent
     public int PowerConsumption { get; }
     private SsdConnectOption ConnectOption { get; }
 
+    // Debuilder for getting SSD builder based on finished one
     public ISsdBuilder Direct(ISsdBuilder builder)
     {
         if (builder is null) throw new BuilderNullException(nameof(builder));

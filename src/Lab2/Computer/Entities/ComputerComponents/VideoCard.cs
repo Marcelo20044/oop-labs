@@ -26,6 +26,7 @@ public class VideoCard : IComputerComponent
     public string PciEVersion { get; }
     public Dimensions Dimensions { get; }
 
+    // Debuilder for getting Video Card builder based on finished one
     public IVideoCardBuilder Direct(IVideoCardBuilder builder)
     {
         if (builder is null) throw new BuilderNullException(nameof(builder));

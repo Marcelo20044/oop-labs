@@ -19,6 +19,7 @@ public class Chipset : IComputerComponent
 
     public static ChipsetBuilder Builder() => new();
 
+    // Debuilder for getting Chipset builder based on finished one
     public ChipsetBuilder Direct(ChipsetBuilder builder)
     {
         if (builder is null) throw new BuilderNullException(nameof(builder));

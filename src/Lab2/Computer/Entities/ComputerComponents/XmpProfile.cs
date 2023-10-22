@@ -15,6 +15,7 @@ public class XmpProfile : IComputerComponent
     public Timings Timings { get; }
     public FrequencyAndVoltage FrequencyAndVoltage { get; }
 
+    // Debuilder for getting XMP Profile builder based on finished one
     public IXmpProfileBuilder Direct(IXmpProfileBuilder builder)
     {
         if (builder is null) throw new BuilderNullException(nameof(builder));

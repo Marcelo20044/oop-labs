@@ -6,7 +6,7 @@ namespace Itmo.ObjectOrientedProgramming.Lab2.Computer.Entities.ComputerComponen
 
 public class Bios : IComputerComponent
 {
-    private Bios(string type, string version, IReadOnlyCollection<Cpu> supportedProcessors)
+    private Bios(string type, string version, IReadOnlyCollection<string> supportedProcessors)
     {
         Type = type;
         Version = version;
@@ -15,10 +15,11 @@ public class Bios : IComputerComponent
 
     public string Type { get; }
     public string Version { get; }
-    public IReadOnlyCollection<Cpu> SupportedProcessors { get; }
+    public IReadOnlyCollection<string> SupportedProcessors { get; }
 
     public static BiosBuilder Builder() => new();
 
+    // Debuilder for getting BIOS builder based on finished one
     public BiosBuilder Direct(BiosBuilder builder)
     {
         if (builder is null) throw new BuilderNullException(nameof(builder));
@@ -33,7 +34,7 @@ public class Bios : IComputerComponent
     // Stateful constructor builder for Bios
     public class BiosBuilder
     {
-        private readonly List<Cpu> _supportedProcessors = new();
+        private readonly List<string> _supportedProcessors = new();
         private string? _type;
         private string? _version;
 
@@ -49,9 +50,9 @@ public class Bios : IComputerComponent
             return this;
         }
 
-        public BiosBuilder AddSupportedProcessor(Cpu cpu)
+        public BiosBuilder AddSupportedProcessor(string cpuName)
         {
-            _supportedProcessors.Add(cpu);
+            _supportedProcessors.Add(cpuName);
             return this;
         }
 

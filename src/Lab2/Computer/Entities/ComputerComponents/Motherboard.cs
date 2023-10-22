@@ -10,6 +10,7 @@ public class Motherboard : IComputerComponent
         int pciELinesCount,
         int sataPortsCount,
         int ramSlotsCount,
+        bool hasWiFiModule,
         string supportedDdrVersion,
         Socket cpuSocket,
         Chipset chipset,
@@ -19,6 +20,7 @@ public class Motherboard : IComputerComponent
         PciELinesCount = pciELinesCount;
         SataPortsCount = sataPortsCount;
         RamSlotsCount = ramSlotsCount;
+        HasWiFiModule = hasWiFiModule;
         SupportedDdrVersion = supportedDdrVersion;
         CpuSocket = cpuSocket;
         Chipset = chipset;
@@ -29,17 +31,19 @@ public class Motherboard : IComputerComponent
     public int PciELinesCount { get; }
     public int SataPortsCount { get; }
     public int RamSlotsCount { get; }
+    public bool HasWiFiModule { get; }
     public string SupportedDdrVersion { get; }
     public Socket CpuSocket { get; }
     public Chipset Chipset { get; }
     public FormFactor FormFactor { get; }
     public Bios Bios { get; }
 
+    // Debuilder for getting Motherboard builder based on finished one
     public IMotherboardBuilder Direct(IMotherboardBuilder builder)
     {
         if (builder is null) throw new BuilderNullException(nameof(builder));
 
-        return builder
+        builder
             .WithPciELinesCount(PciELinesCount)
             .WithSataPortsCount(SataPortsCount)
             .WithRamSlotsCount(RamSlotsCount)
@@ -48,5 +52,7 @@ public class Motherboard : IComputerComponent
             .WithChipset(Chipset)
             .WithFormFactor(FormFactor)
             .WithBios(Bios);
+
+        return HasWiFiModule ? builder.WithWiFiModule() : builder;
     }
 }

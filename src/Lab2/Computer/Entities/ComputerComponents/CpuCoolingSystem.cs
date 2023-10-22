@@ -19,6 +19,7 @@ public class CpuCoolingSystem : IComputerComponent
     public Dimensions Dimensions { get; }
     public IReadOnlyCollection<Socket> SupportedSockets { get; }
 
+    // Debuilder for getting CPU Cooling System builder based on finished one
     public ICpuCoolingSystemBuilder Direct(ICpuCoolingSystemBuilder builder)
     {
         if (builder is null) throw new BuilderNullException(nameof(builder));

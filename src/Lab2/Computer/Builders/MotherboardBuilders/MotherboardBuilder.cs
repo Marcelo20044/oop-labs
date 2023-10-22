@@ -9,6 +9,7 @@ public class MotherboardBuilder : IMotherboardBuilder
     private int _pciELinesCount;
     private int _sataPortsCount;
     private int _ramSlotsCount;
+    private bool _hasWiFiModule;
     private string? _supportedDdrVersion;
     private Socket? _cpuSocket;
     private Chipset? _chipset;
@@ -30,6 +31,12 @@ public class MotherboardBuilder : IMotherboardBuilder
     public IMotherboardBuilder WithRamSlotsCount(int ramSlotsCount)
     {
         _ramSlotsCount = ramSlotsCount;
+        return this;
+    }
+
+    public IMotherboardBuilder WithWiFiModule()
+    {
+        _hasWiFiModule = true;
         return this;
     }
 
@@ -69,6 +76,7 @@ public class MotherboardBuilder : IMotherboardBuilder
             _pciELinesCount,
             _sataPortsCount,
             _ramSlotsCount,
+            _hasWiFiModule,
             _supportedDdrVersion ?? throw new AttributeNullException(nameof(_supportedDdrVersion)),
             _cpuSocket ?? throw new AttributeNullException(nameof(_cpuSocket)),
             _chipset ?? throw new AttributeNullException(nameof(_chipset)),

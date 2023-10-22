@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Itmo.ObjectOrientedProgramming.Lab2.Computer.Builders.RamBuilders;
 using Itmo.ObjectOrientedProgramming.Lab2.Computer.Extensions;
 using Itmo.ObjectOrientedProgramming.Lab2.Computer.Models;
@@ -31,6 +32,14 @@ public class Ram : IComputerComponent
     public IReadOnlyCollection<FrequencyAndVoltage> SupportedFrequencyAndVoltagesPairs { get; }
     public IReadOnlyCollection<XmpProfile> AvailableXmpProfiles { get; }
 
+    public bool ValidationWithCpu(Cpu cpu)
+    {
+        return SupportedFrequencyAndVoltagesPairs
+            .Any(frequencyAndVoltage => cpu.SupportedMemoryFrequencies
+                .Any(cpuFrequency => cpuFrequency == frequencyAndVoltage.Frequency));
+    }
+
+    // Debuilder for getting RAM builder based on finished one
     public IRamBuilder Direct(IRamBuilder builder)
     {
         if (builder is null) throw new BuilderNullException(nameof(builder));

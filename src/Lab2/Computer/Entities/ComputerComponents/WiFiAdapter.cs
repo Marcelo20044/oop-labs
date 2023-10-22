@@ -22,6 +22,7 @@ public class WiFiAdapter : IComputerComponent
     public string StandardVersion { get; }
     public string PciEVersion { get; }
 
+    // Debuilder for getting Wi-Fi Adapter builder based on finished one
     public IWiFiAdapterBuilder Direct(IWiFiAdapterBuilder builder)
     {
         if (builder is null) throw new BuilderNullException(nameof(builder));
