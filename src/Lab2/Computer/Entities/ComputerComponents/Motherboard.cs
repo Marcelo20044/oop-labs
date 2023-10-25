@@ -14,7 +14,7 @@ public class Motherboard : IComputerComponent
         string supportedDdrVersion,
         Socket cpuSocket,
         Chipset chipset,
-        FormFactor formFactor,
+        MotherboardFormFactor motherboardFormFactor,
         Bios bios)
     {
         PciELinesCount = pciELinesCount;
@@ -24,7 +24,7 @@ public class Motherboard : IComputerComponent
         SupportedDdrVersion = supportedDdrVersion;
         CpuSocket = cpuSocket;
         Chipset = chipset;
-        FormFactor = formFactor;
+        MotherboardFormFactor = motherboardFormFactor;
         Bios = bios;
     }
 
@@ -35,7 +35,7 @@ public class Motherboard : IComputerComponent
     public string SupportedDdrVersion { get; }
     public Socket CpuSocket { get; }
     public Chipset Chipset { get; }
-    public FormFactor FormFactor { get; }
+    public MotherboardFormFactor MotherboardFormFactor { get; }
     public Bios Bios { get; }
 
     // Debuilder for getting Motherboard builder based on finished one
@@ -50,7 +50,7 @@ public class Motherboard : IComputerComponent
             .WithSupportedDdrVersion(SupportedDdrVersion)
             .WithCpuSocket(CpuSocket)
             .WithChipset(Chipset)
-            .WithFormFactor(FormFactor)
+            .WithFormFactor(MotherboardFormFactor)
             .WithBios(Bios);
 
         return HasWiFiModule ? builder.WithWiFiModule() : builder;

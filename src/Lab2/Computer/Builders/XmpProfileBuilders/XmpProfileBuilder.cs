@@ -21,10 +21,22 @@ public class XmpProfileBuilder : IXmpProfileBuilder
         return this;
     }
 
+    public IXmpProfileBuilder Reset()
+    {
+        _timings = null;
+        _frequencyAndVoltage = null;
+        return this;
+    }
+
     public XmpProfile Build()
     {
+        Timings? timings = _timings;
+        FrequencyAndVoltage? frequencyAndVoltage = _frequencyAndVoltage;
+
+        Reset();
+
         return new XmpProfile(
-            _timings ?? throw new AttributeNullException(nameof(_timings)),
-            _frequencyAndVoltage ?? throw new AttributeNullException(nameof(_frequencyAndVoltage)));
+            timings ?? throw new AttributeNullException(nameof(_timings)),
+            frequencyAndVoltage ?? throw new AttributeNullException(nameof(_frequencyAndVoltage)));
     }
 }

@@ -10,5 +10,6 @@ public interface IVideoCardBuilder
     IVideoCardBuilder WithPowerConsumption(int consumption);
     IVideoCardBuilder WithPciEVersion(string version);
     IVideoCardBuilder WithDimensions(Dimensions dimensions);
+    IVideoCardBuilder Reset();
     VideoCard Build();
 }

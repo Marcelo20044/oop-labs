@@ -8,5 +8,6 @@ public interface IWiFiAdapterBuilder
     IWiFiAdapterBuilder WithBluetooth();
     IWiFiAdapterBuilder WithStandardVersion(string version);
     IWiFiAdapterBuilder WithPciEVersion(string version);
+    IWiFiAdapterBuilder Reset();
     WiFiAdapter Build();
 }

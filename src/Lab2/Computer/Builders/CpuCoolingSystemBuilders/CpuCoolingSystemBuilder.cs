@@ -7,9 +7,9 @@ namespace Itmo.ObjectOrientedProgramming.Lab2.Computer.Builders.CpuCoolingSystem
 
 public class CpuCoolingSystemBuilder : ICpuCoolingSystemBuilder
 {
-    private readonly List<Socket> _supportedProcessors = new();
     private int _tpd;
     private Dimensions? _dimensions;
+    private List<Socket> _supportedSockets = new();
 
     public ICpuCoolingSystemBuilder WithTpd(int tpd)
     {
@@ -25,15 +25,30 @@ public class CpuCoolingSystemBuilder : ICpuCoolingSystemBuilder
 
     public ICpuCoolingSystemBuilder AddSupportedSocket(Socket socket)
     {
-        _supportedProcessors.Add(socket);
+        _supportedSockets.Add(socket);
+        return this;
+    }
+
+    public ICpuCoolingSystemBuilder Reset()
+    {
+        _tpd = 0;
+        _dimensions = null;
+        _supportedSockets = new List<Socket>();
+
         return this;
     }
 
     public CpuCoolingSystem Build()
     {
+        int tpd = _tpd;
+        Dimensions? dimensions = _dimensions;
+        List<Socket> supportedSockets = _supportedSockets;
+
+        Reset();
+
         return new CpuCoolingSystem(
-            _tpd,
-            _dimensions ?? throw new AttributeNullException(nameof(_dimensions)),
-            _supportedProcessors);
+            tpd,
+            dimensions ?? throw new AttributeNullException(nameof(_dimensions)),
+            supportedSockets);
     }
 }

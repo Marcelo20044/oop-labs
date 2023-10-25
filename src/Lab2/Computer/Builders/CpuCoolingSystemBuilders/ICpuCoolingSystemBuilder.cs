@@ -10,6 +10,6 @@ public interface ICpuCoolingSystemBuilder
     ICpuCoolingSystemBuilder WithDimensions(Dimensions dimensions);
 
     ICpuCoolingSystemBuilder AddSupportedSocket(Socket socket);
-
+    ICpuCoolingSystemBuilder Reset();
     CpuCoolingSystem Build();
 }

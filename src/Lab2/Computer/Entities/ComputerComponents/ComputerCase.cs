@@ -11,7 +11,7 @@ public class ComputerCase : IComputerComponent
     public ComputerCase(
         Dimensions dimensions,
         Dimensions maxVideoCardDimensions,
-        IReadOnlyCollection<FormFactor> supportedMotherboardFormFactors)
+        IReadOnlyCollection<MotherboardFormFactor> supportedMotherboardFormFactors)
     {
         Dimensions = dimensions;
         MaxVideoCardDimensions = maxVideoCardDimensions;
@@ -20,7 +20,7 @@ public class ComputerCase : IComputerComponent
 
     public Dimensions Dimensions { get; }
     public Dimensions MaxVideoCardDimensions { get; }
-    public IReadOnlyCollection<FormFactor> SupportedMotherboardFormFactors { get; }
+    public IReadOnlyCollection<MotherboardFormFactor> SupportedMotherboardFormFactors { get; }
 
     // Debuilder for getting Computer Case builder based on finished one
     public IComputerCaseBuilder Direct(IComputerCaseBuilder builder)

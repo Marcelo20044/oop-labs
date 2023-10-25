@@ -12,7 +12,8 @@ public interface IMotherboardBuilder
     IMotherboardBuilder WithSupportedDdrVersion(string version);
     IMotherboardBuilder WithCpuSocket(Socket socket);
     IMotherboardBuilder WithChipset(Chipset chipset);
-    IMotherboardBuilder WithFormFactor(FormFactor formFactor);
+    IMotherboardBuilder WithFormFactor(MotherboardFormFactor motherboardFormFactor);
     IMotherboardBuilder WithBios(Bios bios);
+    IMotherboardBuilder Reset();
     Motherboard Build();
 }

@@ -7,12 +7,12 @@ namespace Itmo.ObjectOrientedProgramming.Lab2.Computer.Builders.RamBuilders;
 
 public class RamBuilder : IRamBuilder
 {
-    private readonly List<FrequencyAndVoltage> _supportedFrequencyAndVoltagePairs = new();
-    private readonly List<XmpProfile> _availableXmpProfiles = new();
     private int _availableMemory;
     private int _powerConsumption;
     private string? _ddrVersion;
-    private FormFactor? _formFactor;
+    private string? _formFactor;
+    private List<XmpProfile> _availableXmpProfiles = new();
+    private List<FrequencyAndVoltage> _supportedFrequencyAndVoltagePairs = new();
 
     public IRamBuilder WithAvailableMemory(int availableMemory)
     {
@@ -32,7 +32,7 @@ public class RamBuilder : IRamBuilder
         return this;
     }
 
-    public IRamBuilder WithFormFactor(FormFactor formFactor)
+    public IRamBuilder WithFormFactor(string formFactor)
     {
         _formFactor = formFactor;
         return this;
@@ -50,14 +50,33 @@ public class RamBuilder : IRamBuilder
         return this;
     }
 
+    public IRamBuilder Reset()
+    {
+        _availableMemory = _powerConsumption = 0;
+        _ddrVersion = _formFactor = null;
+        _availableXmpProfiles = new List<XmpProfile>();
+        _supportedFrequencyAndVoltagePairs = new List<FrequencyAndVoltage>();
+
+        return this;
+    }
+
     public Ram Build()
     {
+        int availableMemory = _availableMemory;
+        int powerConsumption = _powerConsumption;
+        string? ddrVersion = _ddrVersion;
+        string? formFactor = _formFactor;
+        List<XmpProfile> availableXmpProfiles = _availableXmpProfiles;
+        List<FrequencyAndVoltage> supportedFrequencyAndVoltagePairs = _supportedFrequencyAndVoltagePairs;
+
+        Reset();
+
         return new Ram(
-            _availableMemory,
-            _powerConsumption,
-            _ddrVersion ?? throw new AttributeNullException(nameof(_ddrVersion)),
-            _formFactor ?? throw new AttributeNullException(nameof(_formFactor)),
-            _supportedFrequencyAndVoltagePairs,
-            _availableXmpProfiles);
+            availableMemory,
+            powerConsumption,
+            ddrVersion ?? throw new AttributeNullException(nameof(_ddrVersion)),
+            formFactor ?? throw new AttributeNullException(nameof(_formFactor)),
+            supportedFrequencyAndVoltagePairs,
+            availableXmpProfiles);
     }
 }

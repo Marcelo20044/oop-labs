@@ -8,9 +8,6 @@ namespace Itmo.ObjectOrientedProgramming.Lab2.Computer.Builders.PersonalComputer
 
 public class PersonalComputerBuilder : IPersonalComputerBuilder
 {
-    private readonly List<Ram> _ramCollection = new();
-    private readonly List<Ssd> _ssdCollection = new();
-    private readonly List<Hdd> _hddCollection = new();
     private Cpu? _cpu;
     private Motherboard? _motherboard;
     private PowerSupply? _powerSupply;
@@ -19,6 +16,9 @@ public class PersonalComputerBuilder : IPersonalComputerBuilder
     private VideoCard? _videoCard;
     private XmpProfile? _xmpProfile;
     private WiFiAdapter? _wiFiAdapter;
+    private List<Ram> _ramCollection = new();
+    private List<Ssd> _ssdCollection = new();
+    private List<Hdd> _hddCollection = new();
 
     public IPersonalComputerBuilder AddRam(Ram ram)
     {
@@ -86,6 +86,23 @@ public class PersonalComputerBuilder : IPersonalComputerBuilder
         return this;
     }
 
+    public IPersonalComputerBuilder Reset()
+    {
+        _cpu = null;
+        _motherboard = null;
+        _powerSupply = null;
+        _computerCase = null;
+        _cpuCoolingSystem = null;
+        _videoCard = null;
+        _xmpProfile = null;
+        _wiFiAdapter = null;
+        _ramCollection = new List<Ram>();
+        _ssdCollection = new List<Ssd>();
+        _hddCollection = new List<Hdd>();
+
+        return this;
+    }
+
     public BuildResult Build()
     {
         if (_cpu is null
@@ -95,17 +112,31 @@ public class PersonalComputerBuilder : IPersonalComputerBuilder
             || _cpuCoolingSystem is null)
             return new BuildResult.InvalidBuild();
 
-        return new Validator(new PersonalComputer(
-            _cpu,
-            _motherboard,
-            _powerSupply,
-            _computerCase,
-            _cpuCoolingSystem,
-            _ramCollection,
-            _ssdCollection,
-            _hddCollection,
-            _videoCard,
-            _xmpProfile,
-            _wiFiAdapter)).Validate();
+        Cpu? cpu = _cpu;
+        Motherboard? motherboard = _motherboard;
+        PowerSupply? powerSupply = _powerSupply;
+        ComputerCase? computerCase = _computerCase;
+        CpuCoolingSystem? cpuCoolingSystem = _cpuCoolingSystem;
+        VideoCard? videoCard = _videoCard;
+        XmpProfile? xmpProfile = _xmpProfile;
+        WiFiAdapter? wiFiAdapter = _wiFiAdapter;
+        List<Ram> ramCollection = _ramCollection;
+        List<Ssd> ssdCollection = _ssdCollection;
+        List<Hdd> hddCollection = _hddCollection;
+
+        Reset();
+
+        return Validator.Validate(new PersonalComputer(
+            cpu,
+            motherboard,
+            powerSupply,
+            computerCase,
+            cpuCoolingSystem,
+            ramCollection,
+            ssdCollection,
+            hddCollection,
+            videoCard,
+            xmpProfile,
+            wiFiAdapter));
     }
 }

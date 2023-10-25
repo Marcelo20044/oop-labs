@@ -9,5 +9,6 @@ public interface ISsdBuilder
     ISsdBuilder WithMaxOperationSpeed(int speed);
     ISsdBuilder WithPowerConsumption(int consumption);
     ISsdBuilder WithConnectOption(SsdConnectOption connectOption);
+    ISsdBuilder Reset();
     Ssd Build();
 }

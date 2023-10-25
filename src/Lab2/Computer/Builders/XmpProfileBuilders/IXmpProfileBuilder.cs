@@ -7,5 +7,6 @@ public interface IXmpProfileBuilder
 {
     IXmpProfileBuilder WithTimings(Timings timings);
     IXmpProfileBuilder WithFrequencyAndVoltage(FrequencyAndVoltage frequencyAndVoltage);
+    IXmpProfileBuilder Reset();
     XmpProfile Build();
 }

@@ -7,6 +7,7 @@ public interface IComputerCaseBuilder
 {
     IComputerCaseBuilder WithDimensions(Dimensions dimensions);
     IComputerCaseBuilder WithMaxVideoCardDimensions(Dimensions dimensions);
-    IComputerCaseBuilder AddSupportedMotherboardFormFactor(FormFactor formFactor);
+    IComputerCaseBuilder AddSupportedMotherboardFormFactor(MotherboardFormFactor motherboardFormFactor);
+    IComputerCaseBuilder Reset();
     ComputerCase Build();
 }

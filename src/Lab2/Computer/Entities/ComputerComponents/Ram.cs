@@ -13,7 +13,7 @@ public class Ram : IComputerComponent
         int availableMemory,
         int powerConsumption,
         string ddrVersion,
-        FormFactor formFactor,
+        string formFactor,
         IReadOnlyCollection<FrequencyAndVoltage> supportedFrequencyAndVoltagesPairs,
         IReadOnlyCollection<XmpProfile> availableXmpProfiles)
     {
@@ -28,7 +28,7 @@ public class Ram : IComputerComponent
     public int AvailableMemory { get; }
     public int PowerConsumption { get; }
     public string DdrVersion { get; }
-    public FormFactor FormFactor { get; }
+    public string FormFactor { get; }
     public IReadOnlyCollection<FrequencyAndVoltage> SupportedFrequencyAndVoltagesPairs { get; }
     public IReadOnlyCollection<XmpProfile> AvailableXmpProfiles { get; }
 

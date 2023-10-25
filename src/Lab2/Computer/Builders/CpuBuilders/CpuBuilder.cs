@@ -7,7 +7,6 @@ namespace Itmo.ObjectOrientedProgramming.Lab2.Computer.Builders.CpuBuilders;
 
 public class CpuBuilder : ICpuBuilder
 {
-    private readonly List<int> _supportedMemoryFrequency = new();
     private int _coresFrequency;
     private int _coresCount;
     private int _tpd;
@@ -15,6 +14,7 @@ public class CpuBuilder : ICpuBuilder
     private bool _hasVideoCore;
     private string? _name;
     private Socket? _socket;
+    private List<int> _supportedMemoryFrequency = new();
 
     public ICpuBuilder WithCoresFrequency(int frequency)
     {
@@ -64,16 +64,38 @@ public class CpuBuilder : ICpuBuilder
         return this;
     }
 
+    public ICpuBuilder Reset()
+    {
+        _coresFrequency = _coresCount = _tpd = _powerConsumption = 0;
+        _hasVideoCore = false;
+        _name = null;
+        _socket = null;
+        _supportedMemoryFrequency = new List<int>();
+
+        return this;
+    }
+
     public Cpu Build()
     {
+        int coresFrequency = _coresFrequency;
+        int coresCount = _coresCount;
+        int tpd = _tpd;
+        int powerConsumption = _powerConsumption;
+        bool hasVideoCore = _hasVideoCore;
+        string? name = _name;
+        Socket? socket = _socket;
+        List<int> supportedMemoryFrequency = _supportedMemoryFrequency;
+
+        Reset();
+
         return new Cpu(
-            _coresFrequency,
-            _coresCount,
-            _tpd,
-            _powerConsumption,
-            _hasVideoCore,
-            _name ?? throw new AttributeNullException(nameof(_name)),
-            _socket ?? throw new AttributeNullException(nameof(_socket)),
-            _supportedMemoryFrequency);
+            coresFrequency,
+            coresCount,
+            tpd,
+            powerConsumption,
+            hasVideoCore,
+            name ?? throw new AttributeNullException(nameof(_name)),
+            socket ?? throw new AttributeNullException(nameof(_socket)),
+            supportedMemoryFrequency);
     }
 }

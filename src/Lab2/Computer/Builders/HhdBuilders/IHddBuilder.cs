@@ -7,5 +7,6 @@ public interface IHddBuilder
     IHddBuilder WithCapacity(int capacity);
     IHddBuilder WithSpindleSpeed(int speed);
     IHddBuilder WithPowerConsumption(int consumption);
+    IHddBuilder Reset();
     Hdd Build();
 }

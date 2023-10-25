@@ -42,13 +42,30 @@ public class VideoCardBuilder : IVideoCardBuilder
         return this;
     }
 
+    public IVideoCardBuilder Reset()
+    {
+        _videoMemoryCount = _chipFrequency = _powerConsumption = 0;
+        _pciEVersion = null;
+        _dimensions = null;
+
+        return this;
+    }
+
     public VideoCard Build()
     {
+        int videoMemoryCount = _videoMemoryCount;
+        int chipFrequency = _chipFrequency;
+        int powerConsumption = _powerConsumption;
+        string? pciEVersion = _pciEVersion;
+        Dimensions? dimensions = _dimensions;
+
+        Reset();
+
         return new VideoCard(
-            _videoMemoryCount,
-            _chipFrequency,
-            _powerConsumption,
-            _pciEVersion ?? throw new AttributeNullException(nameof(_pciEVersion)),
-            _dimensions ?? throw new AttributeNullException(nameof(_dimensions)));
+            videoMemoryCount,
+            chipFrequency,
+            powerConsumption,
+            pciEVersion ?? throw new AttributeNullException(nameof(_pciEVersion)),
+            dimensions ?? throw new AttributeNullException(nameof(_dimensions)));
     }
 }

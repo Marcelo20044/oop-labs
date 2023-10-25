@@ -7,9 +7,9 @@ namespace Itmo.ObjectOrientedProgramming.Lab2.Computer.Builders.ComputerCaseBuil
 
 public class ComputerCaseBuilder : IComputerCaseBuilder
 {
-    private readonly List<FormFactor> _supportedMotherboardFormFactors = new();
     private Dimensions? _dimensions;
     private Dimensions? _maxVideoCardDimensions;
+    private List<MotherboardFormFactor> _supportedMotherboardFormFactors = new();
 
     public IComputerCaseBuilder WithDimensions(Dimensions dimensions)
     {
@@ -23,17 +23,30 @@ public class ComputerCaseBuilder : IComputerCaseBuilder
         return this;
     }
 
-    public IComputerCaseBuilder AddSupportedMotherboardFormFactor(FormFactor formFactor)
+    public IComputerCaseBuilder AddSupportedMotherboardFormFactor(MotherboardFormFactor motherboardFormFactor)
     {
-        _supportedMotherboardFormFactors.Add(formFactor);
+        _supportedMotherboardFormFactors.Add(motherboardFormFactor);
+        return this;
+    }
+
+    public IComputerCaseBuilder Reset()
+    {
+        _supportedMotherboardFormFactors = new List<MotherboardFormFactor>();
+        _dimensions = _maxVideoCardDimensions = null;
         return this;
     }
 
     public ComputerCase Build()
     {
+        Dimensions? dimensions = _dimensions;
+        Dimensions? videoCardDimensions = _maxVideoCardDimensions;
+        List<MotherboardFormFactor> formFactors = _supportedMotherboardFormFactors;
+
+        Reset();
+
         return new ComputerCase(
-            _dimensions ?? throw new AttributeNullException(nameof(_dimensions)),
-            _maxVideoCardDimensions ?? throw new AttributeNullException(nameof(_maxVideoCardDimensions)),
-            _supportedMotherboardFormFactors);
+            dimensions ?? throw new AttributeNullException(nameof(_dimensions)),
+            videoCardDimensions ?? throw new AttributeNullException(nameof(_maxVideoCardDimensions)),
+            formFactors);
     }
 }

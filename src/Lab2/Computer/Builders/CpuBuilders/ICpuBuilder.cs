@@ -13,5 +13,6 @@ public interface ICpuBuilder
     ICpuBuilder WithName(string name);
     ICpuBuilder WithSocket(Socket socket);
     ICpuBuilder AddSupportedMemoryFrequency(int supportedFrequency);
+    ICpuBuilder Reset();
     Cpu Build();
 }

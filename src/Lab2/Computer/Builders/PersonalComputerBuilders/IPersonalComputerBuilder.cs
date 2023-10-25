@@ -16,5 +16,6 @@ public interface IPersonalComputerBuilder
     IPersonalComputerBuilder WithPowerSupply(PowerSupply powerSupply);
     IPersonalComputerBuilder WithComputerCase(ComputerCase computerCase);
     IPersonalComputerBuilder WithCpuCoolingSystem(CpuCoolingSystem coolingSystem);
+    IPersonalComputerBuilder Reset();
     BuildResult Build();
 }

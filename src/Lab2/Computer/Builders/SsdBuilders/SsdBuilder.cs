@@ -34,12 +34,26 @@ public class SsdBuilder : ISsdBuilder
         return this;
     }
 
+    public ISsdBuilder Reset()
+    {
+        _capacity = _maxOperationSpeed = _powerConsumption = 0;
+
+        return this;
+    }
+
     public Ssd Build()
     {
+        int capacity = _capacity;
+        int maxOperationSpeed = _maxOperationSpeed;
+        int powerConsumption = _powerConsumption;
+        SsdConnectOption connectOption = _connectOption;
+
+        Reset();
+
         return new Ssd(
-            _capacity,
-            _maxOperationSpeed,
-            _powerConsumption,
-            _connectOption);
+            capacity,
+            maxOperationSpeed,
+            powerConsumption,
+            connectOption);
     }
 }

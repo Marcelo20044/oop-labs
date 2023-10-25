@@ -26,11 +26,23 @@ public class HddBuilder : IHddBuilder
         return this;
     }
 
+    public IHddBuilder Reset()
+    {
+        _capacity = _spindleSpeed = _powerConsumption = 0;
+        return this;
+    }
+
     public Hdd Build()
     {
+        int capacity = _capacity;
+        int spindleSpeed = _spindleSpeed;
+        int powerConsumption = _powerConsumption;
+
+        Reset();
+
         return new Hdd(
-            _capacity,
-            _spindleSpeed,
-            _powerConsumption);
+            capacity,
+            spindleSpeed,
+            powerConsumption);
     }
 }

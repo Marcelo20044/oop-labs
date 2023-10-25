@@ -34,12 +34,29 @@ public class WiFiAdapterBuilder : IWiFiAdapterBuilder
         return this;
     }
 
+    public IWiFiAdapterBuilder Reset()
+    {
+        _powerConsumption = 0;
+        _hasBluetooth = false;
+        _standardVersion = null;
+        _pciEVersion = null;
+
+        return this;
+    }
+
     public WiFiAdapter Build()
     {
+        int powerConsumption = _powerConsumption;
+        bool hasBluetooth = _hasBluetooth;
+        string? standardVersion = _standardVersion;
+        string? pciEVersion = _pciEVersion;
+
+        Reset();
+
         return new WiFiAdapter(
-            _powerConsumption,
-            _hasBluetooth,
-            _standardVersion ?? throw new AttributeNullException(nameof(_standardVersion)),
-            _pciEVersion ?? throw new AttributeNullException(nameof(_pciEVersion)));
+            powerConsumption,
+            hasBluetooth,
+            standardVersion ?? throw new AttributeNullException(nameof(_standardVersion)),
+            pciEVersion ?? throw new AttributeNullException(nameof(_pciEVersion)));
     }
 }
