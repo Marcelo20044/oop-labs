@@ -1,5 +1,11 @@
 [*.cs]
 
+# Disabled nested class error for Result Types
+dotnet_diagnostic.CA1034.severity = none
+
+# Disabled for useless nullable checks
+dotnet_diagnostic.CA1062.severity = none
+
 # IDE0008: Use explicit type
 csharp_style_var_when_type_is_apparent = true:warning
 
