@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using Itmo.ObjectOrientedProgramming.Lab3.Messages.Models;
 
 namespace Itmo.ObjectOrientedProgramming.Lab3.Messages.Entities;
@@ -18,7 +19,7 @@ public class Message : IEquatable<Message>
 
     public override string ToString()
     {
-        return Header + "\n" + Body;
+        return new StringBuilder(Header).Append('\n').Append(Body).ToString();
     }
 
     public bool Equals(Message? other)

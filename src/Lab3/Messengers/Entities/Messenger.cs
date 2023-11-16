@@ -13,7 +13,6 @@ public class Messenger : IMessenger
 
     public void WriteText(string text)
     {
-        Console.WriteLine(Name + ":");
-        Console.WriteLine(text);
+        Console.WriteLine($"{Name}:\n{text}");
     }
 }
