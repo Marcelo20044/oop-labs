@@ -18,10 +18,14 @@ public class FileSystemManagementAppTests
     private static readonly FileCopyCommandHandler FileCopyCommandHandler = new();
     private static readonly FileDeleteCommandHandler FileDeleteCommandHandler = new();
     private static readonly FileRenameCommandHandler FileRenameCommandHandler = new();
+    private readonly TestFileSystem _testFileSystem = new TestFileSystem();
 
     public FileSystemManagementAppTests()
     {
         BuildHandlersChain();
+        _testFileSystem.CreateFileSystemEntity("/Users/markhvostenko/Documents");
+        _testFileSystem.CreateFileSystemEntity("/Users/markhvostenko/Documents/testOopLab");
+        _testFileSystem.CreateFileSystemEntity("/Users/markhvostenko/Documents/test");
     }
 
     [Fact]
@@ -30,9 +34,11 @@ public class FileSystemManagementAppTests
         const string connectRequest = "connect /Users/markhvostenko/Documents -m local";
         var connectRequestIterator = new RequestIterator(connectRequest);
         ICommand? command = ConnectCommandHandler.Handle(connectRequestIterator);
+        Assert.NotNull(command);
+        command.FileSystem = _testFileSystem;
 
         ExecutionResult expected = ExecutionResult.Success;
-        ExecutionResult? actual = command?.Execute();
+        ExecutionResult? actual = command.Execute();
 
         Assert.Equal(expected, actual);
     }
@@ -59,7 +65,7 @@ public class FileSystemManagementAppTests
     {
         IFileSystem? fileSystem = MakeConnection();
 
-        const string treeGotoRequest = "tree goto C++";
+        const string treeGotoRequest = "tree goto testOopLab";
         var treeGotoRequestIterator = new RequestIterator(treeGotoRequest);
         ICommand? treeGotoCommand = ConnectCommandHandler.Handle(treeGotoRequestIterator);
         Assert.NotNull(treeGotoCommand);
@@ -68,7 +74,7 @@ public class FileSystemManagementAppTests
         ExecutionResult expected = ExecutionResult.Success;
         ExecutionResult? actual = treeGotoCommand.Execute();
 
-        string expectedDirectoryPath = "/Users/markhvostenko/Documents/C++";
+        string expectedDirectoryPath = "/Users/markhvostenko/Documents/testOopLab";
         string? actualDirectoryPath = fileSystem?.CurrentDirectoryPath;
 
         Assert.Equal(expected, actual);
@@ -131,7 +137,7 @@ public class FileSystemManagementAppTests
     {
         IFileSystem? fileSystem = MakeConnection();
 
-        const string fileCopyRequest = "file copy testOopLab/test /Users/markhvostenko/Documents";
+        const string fileCopyRequest = "file copy test /Users/markhvostenko/Documents/testOopLab";
         var fileCopyRequestIterator = new RequestIterator(fileCopyRequest);
         ICommand? fileCopyCommand = ConnectCommandHandler.Handle(fileCopyRequestIterator);
         Assert.NotNull(fileCopyCommand);
@@ -148,7 +154,7 @@ public class FileSystemManagementAppTests
     {
         IFileSystem? fileSystem = MakeConnection();
 
-        const string fileRenameRequest = "file rename testOopLab/test newTest";
+        const string fileRenameRequest = "file rename test newTest";
         var fileRenameRequestIterator = new RequestIterator(fileRenameRequest);
         ICommand? fileRenameCommand = ConnectCommandHandler.Handle(fileRenameRequestIterator);
         Assert.NotNull(fileRenameCommand);
@@ -165,7 +171,7 @@ public class FileSystemManagementAppTests
     {
         IFileSystem? fileSystem = MakeConnection();
 
-        const string fileDeleteRequest = "file delete testOopLab/newTest";
+        const string fileDeleteRequest = "file delete test";
         var fileDeleteRequestIterator = new RequestIterator(fileDeleteRequest);
         ICommand? fileDeleteCommand = ConnectCommandHandler.Handle(fileDeleteRequestIterator);
         Assert.NotNull(fileDeleteCommand);
@@ -175,16 +181,6 @@ public class FileSystemManagementAppTests
         ExecutionResult? actual = fileDeleteCommand.Execute();
 
         Assert.Equal(expected, actual);
-    }
-
-    private static IFileSystem? MakeConnection()
-    {
-        const string connectRequest = "connect /Users/markhvostenko/Documents -m local";
-        var connectRequestIterator = new RequestIterator(connectRequest);
-        ICommand? connectCommand = ConnectCommandHandler.Handle(connectRequestIterator);
-        connectCommand?.Execute();
-
-        return connectCommand?.FileSystem;
     }
 
     private static void BuildHandlersChain()
@@ -197,5 +193,17 @@ public class FileSystemManagementAppTests
         FileMoveCommandHandler.NextHandler = FileCopyCommandHandler;
         FileCopyCommandHandler.NextHandler = FileDeleteCommandHandler;
         FileDeleteCommandHandler.NextHandler = FileRenameCommandHandler;
+    }
+
+    private IFileSystem? MakeConnection()
+    {
+        const string connectRequest = "connect /Users/markhvostenko/Documents -m local";
+        var connectRequestIterator = new RequestIterator(connectRequest);
+        ICommand? connectCommand = ConnectCommandHandler.Handle(connectRequestIterator);
+        Assert.NotNull(connectCommand);
+        connectCommand.FileSystem = _testFileSystem;
+        connectCommand.Execute();
+
+        return connectCommand.FileSystem;
     }
 }
