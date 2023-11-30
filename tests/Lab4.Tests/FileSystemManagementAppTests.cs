@@ -3,16 +3,18 @@ using Itmo.ObjectOrientedProgramming.Lab4.Commands.Models;
 using Itmo.ObjectOrientedProgramming.Lab4.FileSystems.Entities;
 using Itmo.ObjectOrientedProgramming.Lab4.RequestParsing.Handlers.CommandHandlers;
 using Itmo.ObjectOrientedProgramming.Lab4.RequestParsing.Iterators;
+using Itmo.ObjectOrientedProgramming.Lab4.RequestParsing.ParamsHandlers.ConnectCommandFlagsHandlers;
+using Itmo.ObjectOrientedProgramming.Lab4.RequestParsing.ParamsHandlers.TreeListCommandFlagsHandler;
 using Xunit;
 
 namespace Itmo.ObjectOrientedProgramming.Lab4.Tests;
 
 public class FileSystemManagementAppTests
 {
-    private static readonly ConnectCommandHandler ConnectCommandHandler = new();
+    private static readonly ConnectCommandHandler ConnectCommandHandler = new(new ConnectModeFlagHandler());
     private static readonly DisconnectCommandHandler DisconnectCommandHandler = new();
     private static readonly TreeGotoCommandHandler TreeGotoCommandHandler = new();
-    private static readonly TreeListCommandHandler TreeListCommandHandler = new();
+    private static readonly TreeListCommandHandler TreeListCommandHandler = new(new DepthFlagHandler());
     private static readonly FileShowCommandHandler FileShowCommandHandler = new();
     private static readonly FileMoveCommandHandler FileMoveCommandHandler = new();
     private static readonly FileCopyCommandHandler FileCopyCommandHandler = new();

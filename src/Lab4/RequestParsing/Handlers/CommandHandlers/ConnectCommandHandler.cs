@@ -1,14 +1,19 @@
 using Itmo.ObjectOrientedProgramming.Lab4.Commands.Builders.ConnectCommandBuilders;
 using Itmo.ObjectOrientedProgramming.Lab4.Commands.Entities;
-using Itmo.ObjectOrientedProgramming.Lab4.FileSystems.Entities;
 using Itmo.ObjectOrientedProgramming.Lab4.RequestParsing.Iterators;
+using Itmo.ObjectOrientedProgramming.Lab4.RequestParsing.ParamsHandlers.ConnectCommandFlagsHandlers;
 
 namespace Itmo.ObjectOrientedProgramming.Lab4.RequestParsing.Handlers.CommandHandlers;
 
 public class ConnectCommandHandler : BaseCommandHandler
 {
     private const string CommandName = "connect";
-    private const string ModeFlag = "-m";
+    private readonly IConnectCommandFlagsHandler _flagsHandler;
+
+    public ConnectCommandHandler(IConnectCommandFlagsHandler flagsHandler)
+    {
+        _flagsHandler = flagsHandler;
+    }
 
     public override ICommand? Handle(RequestIterator request)
     {
@@ -17,18 +22,16 @@ public class ConnectCommandHandler : BaseCommandHandler
         IConnectCommandBuilder commandBuilder = new ConnectCommandBuilder()
             .WithDirectoryPath(request.Current);
 
-        if (!request.Move() || request.Current != ModeFlag || !request.Move())
-            return base.Handle(request);
+        commandBuilder.WithDirectoryPath(request.Current);
 
-        switch (request.Current)
+        while (request.Move())
         {
-            case "local":
-                commandBuilder.WithConnectionMode(new LocalFileSystem());
-                break;
-            default:
-                return base.Handle(request);
+            string flag = request.Current;
+            if (!request.Move()) break;
+
+            _flagsHandler.Handle(flag, request.Current, commandBuilder);
         }
 
-        return request.Move() ? base.Handle(request) : commandBuilder.Build();
+        return commandBuilder.Build();
     }
 }
