@@ -7,8 +7,8 @@ public static class CollectionExtensions
 {
     public static void ForEach<T>(this IReadOnlyCollection<T> collection, Action<T> action)
     {
-        if (collection is null) throw new ArgumentNullException(nameof(collection));
-        if (action is null) throw new ArgumentNullException(nameof(action));
+        ArgumentNullException.ThrowIfNull(collection);
+        ArgumentNullException.ThrowIfNull(action);
 
         foreach (T item in collection)
         {

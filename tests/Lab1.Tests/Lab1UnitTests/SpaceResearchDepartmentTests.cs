@@ -70,7 +70,7 @@ public class SpaceResearchDepartmentTests
     [Fact]
     public void VaklasWithPhotonDeflectorInSubspaceChannelWithAntimatterFlare_ShouldSuccess()
     {
-        ISpaceshipWithDeflector vaklas = new VaklasSpaceship(new ImpulseEngineE(), new GammaJumpEngine(), new Deflector(StrengthClasses.Class1), new Hull(StrengthClasses.Class2));
+        var vaklas = new VaklasSpaceship(new ImpulseEngineE(), new GammaJumpEngine(), new Deflector(StrengthClasses.Class1), new Hull(StrengthClasses.Class2));
         vaklas.SetPhotonDeflector();
 
         const int antimatterFlaresCount = 1;

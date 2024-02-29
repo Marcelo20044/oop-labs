@@ -10,8 +10,8 @@ public static class CalculatingCenter
 {
     public static RouteReport GetSuccessReport(BaseEngine engine, double distance, ExchangeRate exchangeRate)
     {
-        if (engine == null) throw new ArgumentNullException(nameof(engine));
-        if (exchangeRate == null) throw new ArgumentNullException(nameof(exchangeRate));
+        ArgumentNullException.ThrowIfNull(engine);
+        ArgumentNullException.ThrowIfNull(exchangeRate);
 
         double travelTime = distance / engine.Speed;
         double spentFuel = 0;
